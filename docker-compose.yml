@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   mongodb:
-    container_name: pcx-db
+    container_name: podcastx-db
     image: "mongo:latest"
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     stop_grace_period: "${DOCKER_STOP_GRACE_PERIOD:-3s}"
@@ -17,7 +17,7 @@ services:
       - proxy
 
   redis:
-    container_name: pcx-redis
+    container_name: podcastx-redis
     env_file:
       - ".env"
     image: "redis:5.0.4"
@@ -29,7 +29,7 @@ services:
       - proxy
 
   server:
-    container_name: pcx-server
+    container_name: podcastx-server
     build:
       context: "./server"
       args:
@@ -58,7 +58,7 @@ services:
       - proxy
 
   worker:
-    container_name: pcx-worker
+    container_name: podcastx-worker
     build:
       context: "./server"
       args:
@@ -82,7 +82,7 @@ services:
       - proxy
 
   web:
-    container_name: pcx-web
+    container_name: podcastx-web
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     build:
       context:
