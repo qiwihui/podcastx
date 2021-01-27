@@ -48,7 +48,7 @@ export default {
     extractUrl () {
       this.loading = true
       let data = {url: this.searchUrl}
-      fetch('/api/articles/', {
+      fetch('/api/articles', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
