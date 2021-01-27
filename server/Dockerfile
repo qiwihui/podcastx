@@ -21,3 +21,5 @@ ENV FLASK_ENV="${FLASK_ENV}" \
     PYTHONUNBUFFERED="true"
 
 EXPOSE 8000
+RUN mkdir -p /data/podcastx/
+VOLUME /data/podcastx/

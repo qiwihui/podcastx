@@ -12,19 +12,21 @@ from resources.schema import ArticleUrlSchema
 logger = logging.getLogger(__name__)
 
 
+def get_object(model, id):
+    try:
+        target = model.objects.get(id=id)
+    except DoesNotExist as e:
+        logger.error(e, exc_info=True)
+        target = None
+    return target
+
+
 class Article(Resource):
-    def get_object(self, id):
-        try:
-            article = ArticleModel.objects(id=id)
-        except DoesNotExist as e:
-            logger.error(e, exc_info=True)
-            article = None
-        return article
 
     def get(self, article_id):
-        article = self.get_object(article_id)
+        article = get_object(ArticleModel, article_id)
         if article:
-            data = json.loads(article.as_json())
+            data = json.loads(article.to_json())
         else:
             data = {}
 
@@ -32,7 +34,7 @@ class Article(Resource):
         return result, 200
 
     def delete(self, article_id):
-        article = self.get_object(article_id)
+        article = get_object(ArticleModel, article_id)
         if article:
             article.delete()
 
@@ -49,17 +51,33 @@ class Articles(Resource):
         except marshmallow.exceptions.ValidationError as error:
             resp = {"status": 0, "msg": "error", "errors": error.messages}
             return resp, 500
-        import pdb
-
-        pdb.set_trace()
         url = validated_data.get("url")
         ap = create_article({"url": url})
 
-        task_fetch_url(url)
-        return {}, 201
+        task_fetch_url(ap.id, url)
+        return {
+            "status": 1,
+            "msg": "ok",
+            "data": {"id": str(ap.id)},
+        }, 201
 
 
 class ArticlePodcast(Resource):
+
     def get(self, article_id):
-        part = request.args.get("p", 0)
-        return {}, 200
+        part = int(request.args.get("p", 0))
+        article = get_object(ArticleModel, article_id)
+        if article:
+            url = f"/media/{article.id}/{part}.mp3"
+            next_part = f"/media/{article.id}/{part+1}.mp3" if len(article.chuncks) >= part + 1 else ""
+            return {
+                "status": 1,
+                "msg": "ok",
+                "data": {"url": url, "next": next_part},
+            }, 200
+        else:
+            return {
+                "status": 0,
+                "msg": "article not found",
+                "data": {},
+            }, 400

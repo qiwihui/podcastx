@@ -10,6 +10,8 @@ import tempfile
 from pathlib import Path
 from typing import List, Iterator
 from google.cloud import texttospeech
+from google.oauth2 import service_account
+
 
 logger = logging.getLogger(__name__)
 
@@ -17,10 +19,11 @@ logger = logging.getLogger(__name__)
 class GoogleTTS(object):
     def __init__(self, text: str):
         self.text = text
+        self.credentials = service_account.Credentials.from_service_account_file('google-tts-key.json')
 
     def save(self, file_path: str) -> bool:
         # Instantiates a client
-        client = texttospeech.TextToSpeechClient()
+        client = texttospeech.TextToSpeechClient(credentials=self.credentials)
 
         # Set the text input to be synthesized
         synthesis_input = texttospeech.SynthesisInput(text=self.text)
@@ -85,9 +88,8 @@ def make_segments(text: str) -> List[str]:
     return segs
 
 
-def make_audios(text: str, folder: str):
+def make_audios(segs: List[str], folder: str):
 
-    segs = make_segments(text)
     media_dir = Path(folder)
 
     logger.info("spooling %s sentences to temp dir %s", len(segs), media_dir)
@@ -98,4 +100,5 @@ def make_audios(text: str, folder: str):
 
 if __name__ == "__main__":
     with open("text.txt") as f:
-        make_audios(f.read(), tempfile.mkdtemp("podcastx"))
+        segs = make_segments(f.read())
+        make_audios(segs, tempfile.mkdtemp("podcastx"))

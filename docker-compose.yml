@@ -53,6 +53,7 @@ services:
       # - "${DOCKER_WEB_VOLUME:-./public:/app/public}"
       # - web-data:/usr/share/nginx/html/
       - ./server:/code
+      - /data/podcastx:/data/podcastx
     networks:
       - proxy
 
@@ -76,6 +77,7 @@ services:
       # - "${DOCKER_WEB_VOLUME:-./public:/app/public}"
       # - web-data:/usr/share/nginx/html/
       - ./server:/code
+      - /data/podcastx:/data/podcastx
     networks:
       - proxy
 
@@ -89,8 +91,8 @@ services:
       - "80"
     expose:
       - "80"
-    # volumes:
-    #   - web-data:/usr/share/nginx/html/
+    volumes:
+      - /data/podcastx:/data/podcastx
     env_file:
       - ".env"
     links:

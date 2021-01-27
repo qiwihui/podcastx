@@ -16,7 +16,7 @@ class BaseConfig(object):
     CELERY_RESULT_SERIALIZER = "json"
     CELERY_REDIS_MAX_CONNECTIONS = 5
     # save audio file
-    MEDIA_ROOT = "/data/podcasts/"
+    MEDIA_ROOT = os.getenv("MEDIA_ROOT", "/data/podcastx/media/")
 
     MONGODB_SETTINGS = {
         'db': os.getenv("MONGO_INITDB_DATABASE", "podcastx"),

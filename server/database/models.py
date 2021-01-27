@@ -20,6 +20,7 @@ class Article(db.Document):
     updated_at = db.DateTimeField(default=datetime.datetime.utcnow)
     image = db.URLField(required=False)
     # owner = None
+    status = db.IntField(default=0, min_value=0, max_value=3)
 
     meta = {
         "collection": "article",

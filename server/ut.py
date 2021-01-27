@@ -2,10 +2,14 @@ from goose3 import Goose
 from goose3.text import StopWordsChinese
 
 
-def url2text(url: str) -> str:
+def url2article(url: str):
     g = Goose({'stopwords_class': StopWordsChinese})
     article = g.extract(url=url)
-    return article.cleaned_text
+    return article
 
 if __name__ == "__main__":
-    print(url2text("https://coolshell.cn/articles/17497.html"))
+
+    art = url2article("https://coolshell.cn/articles/17497.html")
+
+    import pdb
+    pdb.set_trace()

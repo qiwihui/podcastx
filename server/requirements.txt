@@ -1,3 +1,4 @@
+google-auth
 google-cloud-texttospeech
 goose3<4.0.0,>=3.1.6
 flask
