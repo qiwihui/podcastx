@@ -12,7 +12,7 @@
           placeholder="Article URL"
           class="url-input"
         />
-        <span class="search" @click="extractTweetId">
+        <span class="search" @click="extractUrl">
           <span v-if="loading == false">Analyse</span>
           <span v-else>
             <spinner size="15"></spinner>
@@ -37,13 +37,53 @@ export default {
       msg: 'Podcast X',
       error_message: '',
       loading: false,
-      searchUrl: ''
+      searchUrl: '',
+      articleId: '',
+      article_info: {}
     }
   },
   mounted () {
   },
   methods: {
-    extractTweetId () {
+    extractUrl () {
+      this.loading = true
+      let data = {url: this.searchUrl}
+      fetch('/api/articles/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 1) {
+            this.articleId = data.data.id
+            this.fetchArticle()
+          } else {
+            this.error_message = '解析错误，请重试'
+          }
+          this.loading = false
+        })
+        .catch(() => {
+          this.error_message = '请求错误，请稍后重试'
+          this.loading = false
+        //   console.error(error)
+        })
+        .finally(() => { this.loading = false })
+    },
+    fetchArticle () {
+      fetch('/api/articles/' + this.articleId)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'ok') {
+            this.article_info = data.data
+          }
+        })
+        .catch(() => {
+        })
+        .finally(() => {})
     }
   },
   components: {
