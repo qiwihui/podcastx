@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config.from_object(BaseConfig)
 
 api = Api(app)
-celery = create_celery_app(app)
+celery_app = create_celery_app(app)
 ma = Marshmallow(app)
 
 from database.db import initialize_db

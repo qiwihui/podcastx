@@ -3,7 +3,7 @@ import redis
 from pathlib import Path
 from celery.utils.log import get_task_logger
 from mongoengine.errors import DoesNotExist
-from app import celery
+from app import celery_app
 from config import BaseConfig
 from ut import url2article
 from converter import make_audios, make_segments
@@ -13,7 +13,7 @@ from database.models import Article
 logger = get_task_logger(__name__)
 
 
-@celery.task(name="tasks.task_fetch_url")
+@celery_app.task(name="tasks.task_fetch_url")
 def task_fetch_url(article_id: str, url: str):
     try:
         article = Article.objects.get(id=article_id)
@@ -30,11 +30,11 @@ def task_fetch_url(article_id: str, url: str):
     article.title = art.title
     article.save()
     
-    # folder = Path(BaseConfig.MEDIA_ROOT) / f"{article_id}"
-    # if not folder.exists():
-    #     folder.mkdir(parents=True)
-    # # make audios
-    # make_audios(segs, str(folder))
+    folder = Path(BaseConfig.MEDIA_ROOT) / f"{article_id}"
+    if not folder.exists():
+        folder.mkdir(parents=True)
+    # make audios
+    make_audios(segs, str(folder))
 
     article.status = 1
     article.save()
