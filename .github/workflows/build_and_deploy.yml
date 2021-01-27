@@ -1,0 +1,23 @@
+name: Build docker image for server and web
+
+on:
+  push:
+    branches:    
+      - master
+
+jobs:
+  build:
+    name: Build docker image
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: build
+        run: docker-compose build
+      - name: run services
+        run: |
+          docker-compose down
+          docker-compose up -d
+      - name: reduce disk volume usage
+        run: |
+          docker images | grep none | awk '{print $3}' | xargs docker rmi || true
