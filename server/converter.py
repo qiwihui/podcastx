@@ -4,6 +4,7 @@ Note: ssml must be well-formed according to:
     https://www.w3.org/TR/speech-synthesis/
 """
 # coding: utf-8
+import asyncio
 import logging
 import re
 import tempfile
@@ -21,9 +22,9 @@ class GoogleTTS(object):
         self.text = text
         self.credentials = service_account.Credentials.from_service_account_file('google-tts-key.json')
 
-    def save(self, file_path: str) -> bool:
+    async def save(self, file_path: str) -> bool:
         # Instantiates a client
-        client = texttospeech.TextToSpeechClient(credentials=self.credentials)
+        async_client = texttospeech.TextToSpeechAsyncClient(credentials=self.credentials)
 
         # Set the text input to be synthesized
         synthesis_input = texttospeech.SynthesisInput(text=self.text)
@@ -39,7 +40,7 @@ class GoogleTTS(object):
 
         # Perform the text-to-speech request on the text input with the selected
         # voice parameters and audio file type
-        response = client.synthesize_speech(input=synthesis_input, voice=voice, audio_config=audio_config)
+        response = await async_client.synthesize_speech(input=synthesis_input, voice=voice, audio_config=audio_config)
 
         # The response's audio_content is binary.
         with open(file_path, "wb") as out:
@@ -93,9 +94,17 @@ def make_audios(segs: List[str], folder: str):
     media_dir = Path(folder)
 
     logger.info("spooling %s sentences to temp dir %s", len(segs), media_dir)
-    for i, seg in enumerate(segs):
-        tts = GoogleTTS(seg)
-        tts.save(media_dir / f"{i}.mp3")
+
+    async def main():
+        tasks = []
+        for i, seg in enumerate(segs):
+            tts = GoogleTTS(seg)
+            # tts.save(media_dir / f"{i}.mp3")
+            tasks.append(tts.save(media_dir / f"{i}.mp3"))
+        print(len(tasks))
+        await asyncio.gather(*tasks)
+
+    asyncio.run(main())
 
 
 if __name__ == "__main__":
