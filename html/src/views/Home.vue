@@ -13,7 +13,10 @@
           class="url-input"
         />
         <span class="search" @click="extractUrl">
-          <span>Analyse</span>
+          <span v-if="loading == false">Analyse</span>
+          <span v-else>
+            <spinner size="15"></spinner>
+          </span>
         </span>
       </div>
       <div class="input-message" v-if="error_message != ''">
@@ -21,8 +24,7 @@
       </div>
     </div>
     <div class="audio-player">
-      <aplayer autoplay :music=podcast :list=podcasts v-if="article_info.status==1" />
-      <span v-if="loading==true"><spinner size="40"></spinner></span>
+      <podcast-player :articleId="articleId" v-if="articleId!=''"></podcast-player>
     </div>
   </div>
 </template>
@@ -31,7 +33,7 @@
 import Spinner from 'vue-simple-spinner'
 import NavBar from '@/components/NavBar'
 import FooterNote from '@/components/FooterNote'
-import Aplayer from 'vue-aplayer'
+import PodcastPlayer from '@/components/PodcastPlayer'
 export default {
   name: 'Home',
   data () {
@@ -40,44 +42,13 @@ export default {
       error_message: '',
       loading: false,
       searchUrl: '',
-      articleId: '',
-      article_info: {
-        title: '',
-        author: '',
-        url: '',
-        audios: [],
-        status: 0
-      },
-      podcast: {
-        title: '',
-        artist: '',
-        src: '',
-        list: []
-      },
-      podcasts: []
+      articleId: ''
     }
   },
   mounted () {
   },
   methods: {
-    resetArticle () {
-      this.article_info = {
-        title: '',
-        author: '',
-        url: '',
-        audios: [],
-        status: 0
-      }
-      this.podcasts = []
-      this.podcast = {
-        title: '',
-        artist: '',
-        src: '',
-        list: []
-      }
-    },
     extractUrl () {
-      this.resetArticle()
       this.loading = true
       this.error_message = ''
       let data = {url: this.searchUrl}
@@ -93,8 +64,6 @@ export default {
         .then(data => {
           if (data.status === 1) {
             this.articleId = data.data.id
-            this.fetchArticle()
-            // this.fetchArticleAudios()
           } else {
             this.error_message = '解析错误，请重试'
           }
@@ -106,57 +75,13 @@ export default {
         //   console.error(error)
         })
         .finally(() => { this.loading = false })
-    },
-    fetchArticle () {
-      fetch('/api/articles/' + this.articleId)
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === 1) {
-            this.article_info = data.data
-            if (this.article_info.status === 1) {
-              for (let p in this.article_info.audios) {
-                this.podcasts.push({
-                  title: this.article_info.title,
-                  artist: this.article_info.author,
-                  src: this.article_info.audios[p]
-                })
-              }
-              this.podcast = this.podcasts[0]
-            } else {
-              setTimeout(this.fetchArticle, 3000)
-            }
-          }
-        })
-        .catch(() => {
-        })
-        .finally(() => {})
-    },
-    fetchArticleAudios () {
-      fetch('/api/articles/' + this.articleId + '/audios')
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === 1) {
-            this.article_info.audios = data.data.audios
-            for (let p in this.article_info.audios) {
-              this.podcasts.push({
-                title: this.article_info.title,
-                artist: this.article_info.author,
-                src: this.article_info.audios[p]
-              })
-            }
-            this.podcast = this.podcasts[0]
-          }
-        })
-        .catch(() => {
-        })
-        .finally(() => {})
     }
   },
   components: {
     NavBar,
     FooterNote,
-    Aplayer,
-    Spinner
+    Spinner,
+    PodcastPlayer
   }
 }
 </script>
