@@ -56,6 +56,7 @@ export default {
       }
     },
     fetchArticle () {
+      this.resetArticle()
       this.loading = true
       fetch('/api/articles/' + this.articleId)
         .then(res => res.json())
