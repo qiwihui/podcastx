@@ -23,13 +23,17 @@
         <span>{{ error_message }}</span>
       </div>
     </div>
-    <!-- <footer-note></footer-note> -->
+    <div class="audio-player" v-if="article_info.status==1">
+      <aplayer autoplay :music=podcast :list=podcast.audios />
+    </div>
   </div>
 </template>
 
 <script>
+import Spinner from 'vue-simple-spinner'
 import NavBar from '@/components/NavBar'
 import FooterNote from '@/components/FooterNote'
+import Aplayer from 'vue-aplayer'
 export default {
   name: 'Home',
   data () {
@@ -39,7 +43,19 @@ export default {
       loading: false,
       searchUrl: '',
       articleId: '',
-      article_info: {}
+      article_info: {
+        title: '',
+        author: '',
+        url: '',
+        audios: [],
+        status: 0
+      },
+      podcast: {
+        title: '',
+        artist: '',
+        src: '',
+        list: []
+      }
     }
   },
   mounted () {
@@ -47,6 +63,7 @@ export default {
   methods: {
     extractUrl () {
       this.loading = true
+      this.error_message = ''
       let data = {url: this.searchUrl}
       fetch('/api/articles', {
         method: 'POST',
@@ -61,6 +78,7 @@ export default {
           if (data.status === 1) {
             this.articleId = data.data.id
             this.fetchArticle()
+            // this.fetchArticleAudios()
           } else {
             this.error_message = '解析错误，请重试'
           }
@@ -77,8 +95,28 @@ export default {
       fetch('/api/articles/' + this.articleId)
         .then(res => res.json())
         .then(data => {
-          if (data.status === 'ok') {
+          if (data.status === 1) {
             this.article_info = data.data
+            this.podcast.title = this.article_info.title
+            this.podcast.artist = this.article_info.author
+            if (this.article_info.status === 1) {
+              this.podcast.list = this.article_info.audios
+              this.podcast.src = this.article_info.audios[0]
+            }
+          }
+        })
+        .catch(() => {
+        })
+        .finally(() => {})
+    },
+    fetchArticleAudios () {
+      fetch('/api/articles/' + this.articleId + '/audios')
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 1) {
+            this.article_info.audios = data.data.audios
+            this.podcast.list = this.article_info.audios
+            this.podcast.src = this.article_info.audios[0]
           }
         })
         .catch(() => {
@@ -88,7 +126,9 @@ export default {
   },
   components: {
     NavBar,
-    FooterNote
+    FooterNote,
+    Aplayer,
+    Spinner
   }
 }
 </script>
@@ -159,78 +199,10 @@ input {
   justify-content: center;
 }
 
-.thread-usage {
-  width: 40%;
-  margin: 0 auto;
-}
-
-.thread-usage ul {
-  list-style-position: inside;
-  /* display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  list-style-type: none; */
-}
-
-.thread-usage ul li {
-  position: relative;
-  margin: 0;
-  padding-bottom: 1em;
-  padding-left: 20px;
-}
-
-li:before {
-  background-color: #c00;
-  width: 2px;
-  content: "";
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 5px;
-}
-
-li::after {
-  content: "";
-  position: absolute;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' viewBox='0 0 32 32' focusable='false'%3E%3Ccircle stroke='none' fill='%23c00' cx='16' cy='16' r='10'%3E%3C/circle%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-size: contain;
-  left: 0;
-  top: 2px;
-  width: 12px;
-  height: 12px;
-}
-
-.thread-container {
+.audio-player {
   width: 95%;
   max-width: 960px;
   margin: 0 auto 30px auto;
-}
-
-.more-recent-thread {
-  width: 95%;
-  max-width: 960px;
-  margin: 0 auto 30px auto;
-  display: flex;
-  align-content: flex-start;
-}
-
-.btn {
-  display: inline-block;
-  font-weight: 400;
-  color: #212529;
-  text-align: center;
-  vertical-align: middle;
-  user-select: none;
-  background-color: transparent;
-  border: 1px solid transparent;
-  padding: .375rem .375rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: .25rem;
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-  color: #6c757d;
-  border-color: #6c757d;
 }
 
 </style>
