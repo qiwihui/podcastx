@@ -1,6 +1,11 @@
+from config import BaseConfig
+from app import create_app
 from celery import Celery
 
 CELERY_TASK_LIST = ["tasks"]
+
+
+flask_app = create_app(BaseConfig)
 
 
 def create_celery_app(app):
@@ -30,3 +35,5 @@ def create_celery_app(app):
 
     celery.Task = ContextTask
     return celery
+
+celery_app = create_celery_app(flask_app)

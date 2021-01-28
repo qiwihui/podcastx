@@ -1,4 +1,4 @@
-from .article_podcast import Article, ArticlePodcast, Articles
+from resources.article_podcast import Article, ArticlePodcast, Articles
 
 
 def initialize_routes(api):

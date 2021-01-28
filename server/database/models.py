@@ -1,5 +1,5 @@
 import datetime
-from .db import db
+from app import db
 
 
 # class User(db.EmbeddedDocument):

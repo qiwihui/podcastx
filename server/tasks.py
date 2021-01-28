@@ -1,9 +1,7 @@
-import celery
-import redis
 from pathlib import Path
 from celery.utils.log import get_task_logger
 from mongoengine.errors import DoesNotExist
-from app import celery_app
+from factory import celery_app
 from config import BaseConfig
 from ut import url2article
 from converter import make_audios, make_segments
