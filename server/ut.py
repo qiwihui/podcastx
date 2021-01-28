@@ -11,5 +11,3 @@ if __name__ == "__main__":
 
     art = url2article("https://coolshell.cn/articles/17497.html")
 
-    import pdb
-    pdb.set_trace()
