@@ -63,7 +63,6 @@ export default {
           if (data.status === 1) {
             this.article_info = data.data
             if (this.article_info.status === 1) {
-              this.loading = false
               for (let p in this.article_info.audios) {
                 this.podcasts.push({
                   title: this.article_info.title,
@@ -72,6 +71,7 @@ export default {
                 })
               }
               this.podcast = this.podcasts[0]
+              this.loading = false
             } else {
               setTimeout(this.fetchArticle, 3000)
             }
@@ -80,7 +80,6 @@ export default {
         .catch(() => {
         })
         .finally(() => {
-          this.loading = false
         })
     }
   },
