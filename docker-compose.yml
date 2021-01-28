@@ -48,7 +48,7 @@ services:
     #   - "${DOCKER_WEB_PORT:-127.0.0.1:8000}:8000"
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     stop_grace_period: "${DOCKER_STOP_GRACE_PERIOD:-3s}"
-    command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app
+    command: /usr/local/bin/gunicorn -w 2 -b :8000 runserver:flask_app
     volumes:
       # - "${DOCKER_WEB_VOLUME:-./public:/app/public}"
       # - web-data:/usr/share/nginx/html/
