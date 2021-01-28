@@ -13,18 +13,16 @@
           class="url-input"
         />
         <span class="search" @click="extractUrl">
-          <span v-if="loading == false">Analyse</span>
-          <span v-else>
-            <spinner size="15"></spinner>
-          </span>
+          <span>Analyse</span>
         </span>
       </div>
       <div class="input-message" v-if="error_message != ''">
         <span>{{ error_message }}</span>
       </div>
     </div>
-    <div class="audio-player" v-if="article_info.status==1">
-      <aplayer autoplay :music=podcast :list=podcast.list />
+    <div class="audio-player">
+      <aplayer autoplay :music=podcast :list=podcasts v-if="article_info.status==1" />
+      <span v-if="loading==true"><spinner size="40"></spinner></span>
     </div>
   </div>
 </template>
@@ -55,13 +53,31 @@ export default {
         artist: '',
         src: '',
         list: []
-      }
+      },
+      podcasts: []
     }
   },
   mounted () {
   },
   methods: {
+    resetArticle () {
+      this.article_info = {
+        title: '',
+        author: '',
+        url: '',
+        audios: [],
+        status: 0
+      }
+      this.podcasts = []
+      this.podcast = {
+        title: '',
+        artist: '',
+        src: '',
+        list: []
+      }
+    },
     extractUrl () {
+      this.resetArticle()
       this.loading = true
       this.error_message = ''
       let data = {url: this.searchUrl}
@@ -97,11 +113,17 @@ export default {
         .then(data => {
           if (data.status === 1) {
             this.article_info = data.data
-            this.podcast.title = this.article_info.title
-            this.podcast.artist = this.article_info.author
             if (this.article_info.status === 1) {
-              this.podcast.list = this.article_info.audios
-              this.podcast.src = this.article_info.audios[0]
+              for (let p in this.article_info.audios) {
+                this.podcasts.push({
+                  title: this.article_info.title,
+                  artist: this.article_info.author,
+                  src: this.article_info.audios[p]
+                })
+              }
+              this.podcast = this.podcasts[0]
+            } else {
+              setTimeout(this.fetchArticle, 3000)
             }
           }
         })
@@ -115,8 +137,14 @@ export default {
         .then(data => {
           if (data.status === 1) {
             this.article_info.audios = data.data.audios
-            this.podcast.list = this.article_info.audios
-            this.podcast.src = this.article_info.audios[0]
+            for (let p in this.article_info.audios) {
+              this.podcasts.push({
+                title: this.article_info.title,
+                artist: this.article_info.author,
+                src: this.article_info.audios[p]
+              })
+            }
+            this.podcast = this.podcasts[0]
           }
         })
         .catch(() => {
