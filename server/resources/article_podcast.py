@@ -62,18 +62,19 @@ class Articles(Resource):
         }, 201
 
 
-class ArticlePodcast(Resource):
+class ArticleAudios(Resource):
 
     def get(self, article_id):
-        part = int(request.args.get("p", 0))
         article = get_object(ArticleModel, article_id)
         if article:
-            url = f"/media/{article.id}/{part}.mp3"
-            next_part = f"/media/{article.id}/{part+1}.mp3" if len(article.chuncks) >= part + 1 else ""
             return {
                 "status": 1,
                 "msg": "ok",
-                "data": {"url": url, "next": next_part},
+                "data": {
+                    "title": article.title,
+                    "author": article.author,
+                    "audios": [f"/media/{article.id}/{part}.mp3" for part in len(article.chuncks)]
+                },
             }, 200
         else:
             return {

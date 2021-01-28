@@ -19,6 +19,7 @@ def task_fetch_url(article_id: str):
         return
     if article.status == 1 or not article.url:
         return
+    # FIXME: fix duplicate fetching
     art = url2article(article.url)
 
     segs = make_segments(art.cleaned_text)
