@@ -63,7 +63,7 @@ services:
       context: "./server"
       args:
         - "FLASK_ENV=${FLASK_ENV:-production}"
-    command: celery worker -B -s /var/run/celerybeat-schedule.db -l info -A tasks
+    command: celery worker -l info -A tasks
     depends_on:
       - "redis"
       - "mongodb"
