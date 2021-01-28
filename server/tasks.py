@@ -12,14 +12,14 @@ logger = get_task_logger(__name__)
 
 
 @celery_app.task(name="tasks.task_fetch_url")
-def task_fetch_url(article_id: str, url: str):
+def task_fetch_url(article_id: str):
     try:
         article = Article.objects.get(id=article_id)
     except DoesNotExist as e:
         return
-    if article.status == 1:
+    if article.status == 1 or not article.url:
         return
-    art = url2article(url)
+    art = url2article(article.url)
 
     segs = make_segments(art.cleaned_text)
     article.chuncks = segs
