@@ -22,11 +22,13 @@ def get_object(model, id):
 
 
 class Article(Resource):
-
     def get(self, article_id):
         article = get_object(ArticleModel, article_id)
         if article:
             data = json.loads(article.to_json())
+            data["audios"] = (
+                [f"/media/{article.id}/{part}.mp3" for part in range(len(article.chuncks))] if article.status == 1 else []
+            )
         else:
             data = {}
 
@@ -63,18 +65,13 @@ class Articles(Resource):
 
 
 class ArticleAudios(Resource):
-
     def get(self, article_id):
         article = get_object(ArticleModel, article_id)
         if article:
             return {
                 "status": 1,
                 "msg": "ok",
-                "data": {
-                    "title": article.title,
-                    "author": article.author,
-                    "audios": [f"/media/{article.id}/{part}.mp3" for part in len(article.chuncks)]
-                },
+                "data": {"audios": [f"/media/{article.id}/{part}.mp3" for part in range(len(article.chuncks))]},
             }, 200
         else:
             return {
