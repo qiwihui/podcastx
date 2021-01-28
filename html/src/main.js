@@ -11,7 +11,7 @@ VueAPlayer.disableVersionBadge = true
 Vue.config.productionTip = false
 // google tag manager
 Vue.use(VueGtag, {
-  config: { id: 'G-S66VR7JQ5Y' }
+  config: { id: 'G-T9V2FSEG0Q' }
 })
 
 /* eslint-disable no-new */
