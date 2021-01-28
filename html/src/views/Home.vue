@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="audio-player" v-if="article_info.status==1">
-      <aplayer autoplay :music=podcast :list=podcast.audios />
+      <aplayer autoplay :music=podcast :list=podcast.list />
     </div>
   </div>
 </template>
