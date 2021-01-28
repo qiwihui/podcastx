@@ -51,6 +51,7 @@ export default {
     extractUrl () {
       this.loading = true
       this.error_message = ''
+      this.articleId = ''
       let data = {url: this.searchUrl}
       fetch('/api/articles', {
         method: 'POST',

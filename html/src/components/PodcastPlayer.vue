@@ -36,6 +36,7 @@ export default {
     }
   },
   mounted () {
+    this.fetchArticle()
   },
   methods: {
     resetArticle () {
@@ -86,11 +87,6 @@ export default {
   components: {
     Aplayer,
     Spinner
-  },
-  watch: { 
-    articleId: function(newVal, oldVal) {
-      self.fetchArticle()
-    }
   }
 }
 </script>
