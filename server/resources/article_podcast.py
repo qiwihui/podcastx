@@ -56,8 +56,8 @@ class Articles(Resource):
             return resp, 500
         url = validated_data.get("url")
         ap = create_article({"url": url})
-
-        task_fetch_url.delay(str(ap.id))
+        if ap.status == 0:
+            task_fetch_url.delay(str(ap.id))
         return {
             "status": 1,
             "msg": "ok",
