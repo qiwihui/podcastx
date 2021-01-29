@@ -15,6 +15,10 @@ def create_app(BaseConfig):
     app = Flask(__name__)
     app.config.from_object(BaseConfig)
 
+    # NOTE: This fixes "UserWarning: MongoClient opened before fork."
+    # I'm not aware of side effects yet. Default value is/was "True"
+    app.config['MONGODB_CONNECT'] = False
+
     ma.init_app(app)
     db.init_app(app)
 
