@@ -131,7 +131,7 @@ a {
 }
 
 input {
-  flex: 6;
+  flex: 5;
   padding-left: 8px;
   height: 40px;
   line-height: 40px;
