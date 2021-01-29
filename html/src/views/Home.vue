@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <div class="container">
     <div>
       <nav-bar></nav-bar>
     </div>
     <div class="search-container">
-      <h1>{{ msg }}</h1>
       <div class="input">
         <input
           v-model="searchUrl"
@@ -24,7 +23,7 @@
       </div>
     </div>
     <div class="audio-player">
-      <podcast-player :articleId="articleId" v-if="articleId!=''"></podcast-player>
+      <podcast-player autoplay theme="pic" show-lrc :articleId="articleId" v-if="articleId!=''"></podcast-player>
     </div>
   </div>
 </template>
@@ -38,7 +37,6 @@ export default {
   name: 'Home',
   data () {
     return {
-      msg: 'Podcast X',
       error_message: '',
       loading: false,
       searchUrl: '',
@@ -89,10 +87,28 @@ export default {
 
 <style scoped>
 
-h1,
+.container {
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
+  padding: 0 15px;
+}
+
+/* h1,
 h2 {
   font-weight: normal;
+} */
+
+h1 {
+  font-size: 48px;
+  margin: 30px 0 10px;
 }
+
+h2 {
+  font-size: 36px;
+}
+
 a {
   color: #42b983;
 }
@@ -107,7 +123,7 @@ a {
 }
 
 .input {
-  width: 95%;
+  width: 100%;
   max-width: 740px;
   text-align: center;
   display: flex;
@@ -115,8 +131,8 @@ a {
 }
 
 input {
-  flex: 4;
-  padding-left: 10px;
+  flex: 6;
+  padding-left: 8px;
   height: 40px;
   line-height: 40px;
   outline: 0;
@@ -127,6 +143,11 @@ input {
   border-radius: 8px 0 0 8px;
   box-shadow: none;
   border: 2px solid #42b983;
+}
+
+input[type="text"]
+{
+    font-size: 18px;
 }
 
 .input-message {
@@ -154,7 +175,7 @@ input {
 }
 
 .audio-player {
-  width: 95%;
+  width: 100%;
   max-width: 960px;
   margin: 0 auto 30px auto;
 }

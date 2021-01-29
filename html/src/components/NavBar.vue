@@ -7,34 +7,40 @@
 </template>
 
 <style scoped>
-* {
+/* * {
   padding: 0;
   margin: 0;
+} */
+
+h1 {
+  font-size: 48px;
+  margin: 30px 0 10px;
 }
+
 .navbar {
   margin-bottom: 40px;
   color: #fff;
-  background: #42b983;
-  height: 58px;
+  /* background: #42b983; */
+  /* height: 58px; */
   position: relative;
   display: flex;
   align-items: center;
 }
 
 .navbar .container {
-  width: 90%;
+  width: 100%;
   max-width: 960px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
-.navbar-nav {
+/* .navbar-nav {
   display: flex;
   flex-direction: row;
   list-style: none;
   align-items: center;
-}
+} */
 
 .navbar-title a {
   cursor: pointer;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div>
       <nav-bar></nav-bar>
     </div>
@@ -34,16 +34,20 @@ export default {
 
 <style scoped>
 
-h1,
-h2 {
-  font-weight: normal;
+.container {
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
+  padding: 0 15px;
 }
+
 a {
   color: #42b983;
 }
 
 .audio-player {
-  width: 95%;
+  width: 100%;
   max-width: 960px;
   margin: 0 auto 30px auto;
 }

@@ -4,6 +4,13 @@
 
 const path = require('path')
 
+let apiServer = '';
+try {
+  apiServer = require('../.config').apiServer
+} catch(err) {
+  apiServer = 'http://127.0.0.1:5000'
+}
+
 module.exports = {
   dev: {
 
@@ -12,10 +19,15 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api/**': {
-        target: 'http://127.0.0.1:5000',
+        target: apiServer,
         changeOrigin: true,
         secure: false,
-      }
+      },
+      '/media/**':{
+        target:apiServer,
+        changeOrigin: true,
+        secure: false,
+      },
     },
 
     // Various Dev Server settings
