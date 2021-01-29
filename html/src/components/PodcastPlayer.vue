@@ -66,7 +66,7 @@ export default {
             if (this.article_info.status === 1) {
               for (let p in this.article_info.audios) {
                 this.podcasts.push({
-                  title: this.article_info.title,
+                  title: this.article_info.title + '(part ' + p + ')',
                   artist: this.article_info.author,
                   src: this.article_info.audios[p]
                 })
