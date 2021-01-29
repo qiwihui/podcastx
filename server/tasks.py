@@ -22,11 +22,12 @@ def task_fetch_url(article_id: str):
     # FIXME: fix duplicate fetching
     art = url2article(article.url)
 
-    segs = make_segments(art.cleaned_text)
+    segs = make_segments(art.content)
     article.chuncks = segs
     article.domain = art.domain
-    article.content = art.cleaned_text
+    article.content = art.content
     article.title = art.title
+    article.image = art.image
     article.save()
     
     folder = Path(BaseConfig.MEDIA_ROOT) / f"{article_id}"
