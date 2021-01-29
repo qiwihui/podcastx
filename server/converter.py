@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class GoogleTTS(object):
     def __init__(self, text: str):
         self.text = text
-        self.credentials = service_account.Credentials.from_service_account_file('google-tts-key.json')
+        self.credentials = service_account.Credentials.from_service_account_file("google-tts-key.json")
 
     async def save(self, file_path: str) -> bool:
         # Instantiates a client
@@ -32,7 +32,12 @@ class GoogleTTS(object):
         # Build the voice request, select the language code ("en-US") and the ssml
         # voice gender ("neutral")
         voice = texttospeech.VoiceSelectionParams(
-            language_code="zh-CN", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+            # default
+            # language_code="zh-CN", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+            # wavenet
+            language_code="cmn-CN",
+            name="cmn-CN-Wavenet-A",
+            ssml_gender=texttospeech.SsmlVoiceGender.MALE,
         )
 
         # Select the type of audio file you want returned
@@ -52,7 +57,7 @@ class GoogleTTS(object):
 MAX_CHARS = 500
 
 # API supports max 5000 chars per request.
-def segments(sents: List[str], maxchars: int=MAX_CHARS) -> Iterator:
+def segments(sents: List[str], maxchars: int = MAX_CHARS) -> Iterator:
     i = 0
     while True:
         curseg = []
