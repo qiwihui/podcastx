@@ -1,6 +1,6 @@
 <template>
   <div>
-    <aplayer autoplay :music=podcast :list=podcasts v-if="article_info.status==1" />
+    <aplayer autoplay :music=podcast v-if="article_info.status==1" />
     <span v-if="loading==true"><spinner size="40"></spinner></span>
   </div>
 </template>
@@ -66,7 +66,7 @@ export default {
             if (this.article_info.status === 1) {
               for (let p in this.article_info.audios) {
                 this.podcasts.push({
-                  title: this.article_info.title + '(part ' + p + ')',
+                  title: this.article_info.title,
                   artist: this.article_info.author,
                   src: this.article_info.audios[p]
                 })

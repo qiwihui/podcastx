@@ -27,7 +27,8 @@ class Article(Resource):
         if article:
             data = json.loads(article.to_json())
             data["audios"] = (
-                [f"/media/{article.id}/{part}.mp3" for part in range(len(article.chuncks))] if article.status == 1 else []
+                # [f"/media/{article.id}/{part}.mp3" for part in range(len(article.chuncks))] if article.status == 1 else []
+                [f"/media/{article.id}/full.mp3"] if article.status == 1 else []
             )
         else:
             data = {}

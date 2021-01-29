@@ -1,6 +1,3 @@
-google-auth
-google-cloud-texttospeech
-goose3<4.0.0,>=3.1.6
 flask
 flask_restful
 mongoengine
@@ -8,9 +5,12 @@ flask-mongoengine
 flask-marshmallow
 requests
 python-dateutil
-redis
 # Data and workers.
 redis==3.5.3
 celery==4.4.6
 # Application server for both development and production.
 gunicorn==20.0.4
+google-auth
+google-cloud-texttospeech
+goose3<4.0.0,>=3.1.6
+pydub

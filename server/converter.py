@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import List, Iterator
 from google.cloud import texttospeech
 from google.oauth2 import service_account
+from pydub import AudioSegment
 
 
 logger = logging.getLogger(__name__)
@@ -106,10 +107,15 @@ def make_audios(segs: List[str], folder: str):
             tts = GoogleTTS(seg)
             # tts.save(media_dir / f"{i}.mp3")
             tasks.append(tts.save(media_dir / f"{i}.mp3"))
-        print(len(tasks))
         await asyncio.gather(*tasks)
 
     asyncio.run(main())
+
+    # combine mp3 audios
+    audios = [AudioSegment.from_file(media_dir / f"{i}.mp3") for i in len(segs)]
+    full_audio = sum(audios)
+    full_audio.export(str(media_dir / "full.mp3"), format="mp3")
+    logger.info(f"Audio content written to file {media_dir}/full.mp3")
 
 
 if __name__ == "__main__":

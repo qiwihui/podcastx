@@ -6,7 +6,7 @@ WORKDIR /code
 COPY requirements.txt requirements.txt
 
 ENV BUILD_DEPS="build-essential" \
-    APP_DEPS="curl libpq-dev"
+    APP_DEPS="curl libpq-dev ffmpeg libavcodec-extra"
 
 RUN apt-get update \
   && apt-get install -y ${BUILD_DEPS} ${APP_DEPS} --no-install-recommends \
