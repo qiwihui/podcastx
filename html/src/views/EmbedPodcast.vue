@@ -31,12 +31,16 @@ export default {
 
 <style scoped>
 
+body {
+  background: none;
+}
+
 .container {
   /* max-width: 40rem; */
   margin-left: auto;
   margin-right: auto;
   /* margin-bottom: 50px; */
-  padding: 0 15px;
+  padding: 10px;
 }
 
 a {
