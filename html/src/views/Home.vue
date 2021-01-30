@@ -40,10 +40,13 @@
       <section class="feature-container">
         <h2>功能</h2>
         <section class="feature-items">
-          <feature-card :image='""' :title='"AI 语音"' :description='"使用 AI 驱动的文本到语音技术将喜欢的新闻、博客转换为清晰自然的语音。"'></feature-card>
-          <feature-card :image='""' :title='"语言"' :description='"支持中文和英文，支持男生和女生发音。"'></feature-card>
-          <feature-card :image='""' :title='"音频播放器"' :description='"支持使用播放器将音频嵌入到您的博客或网站中。"'></feature-card>
-          <feature-card :image='""' :title='"文章导入"' :description='"支持从 URL 和 RSS 导入文章列表。"'></feature-card>
+          <feature-card
+            v-for="feature in features"
+            :key="feature.title"
+            :image="feature.image"
+            :title="feature.title"
+            :description="feature.description"
+          ></feature-card>
         </section>
       </section>
     </main>
@@ -63,7 +66,30 @@ export default {
       error_message: '',
       loading: false,
       searchUrl: '',
-      articleId: ''
+      articleId: '',
+      features: [
+        {
+          image: '',
+          title: 'AI 语音',
+          description:
+            '使用 AI 驱动的文本到语音技术将喜欢的新闻、博客转换为清晰自然的语音。'
+        },
+        {
+          image: '',
+          title: '语言',
+          description: '支持中文和英文，支持男生和女生发音。'
+        },
+        {
+          image: '',
+          title: '音频播放器',
+          description: '支持使用播放器将音频嵌入到您的博客或网站中。'
+        },
+        {
+          image: '',
+          title: '文章导入',
+          description: '支持从 URL 和 RSS 导入文章列表。'
+        }
+      ]
     }
   },
   mounted () {},
