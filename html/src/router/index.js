@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/views/Home'
 import Podcast from '@/views/Podcast'
 import EmbedPodcast from '@/views/EmbedPodcast'
+import Login from '@/views/Login'
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ export default new Router({
       path: '/embed/:podcastId',
       name: 'EmbedPodcast',
       component: EmbedPodcast
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
     }
   ]
 })

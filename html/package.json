@@ -11,12 +11,15 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "hls.js": "^0.14.17",
     "vue": "^2.5.2",
     "vue-aplayer": "^1.6.1",
     "vue-gtag": "^1.10.0",
     "vue-router": "^3.0.1",
-    "vue-simple-spinner": "^1.2.10"
+    "vue-simple-spinner": "^1.2.10",
+    "vuex": "^3.6.2",
+    "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

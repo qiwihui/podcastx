@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import VueGtag from 'vue-gtag'
 import VueAPlayer from 'vue-aplayer'
 
@@ -17,6 +18,7 @@ Vue.use(VueGtag, {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   router,
   components: { App },
   template: '<App/>'
