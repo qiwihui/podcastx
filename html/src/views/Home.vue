@@ -156,6 +156,10 @@ h3 {
   font-size: 24px;
 }
 
+p {
+  margin: 0.5rem;
+}
+
 a {
   color: #42b983;
 }
@@ -245,8 +249,13 @@ input[type="text"] {
   flex-wrap: wrap;
 }
 
-.feature-items section {
-  width: 100%;
-  min-width: 50%;
+.feature-items div {
+  width: 48%;
+}
+
+@media (max-width: 700px) {
+  .feature-items div {
+    width: 100%;
+  }
 }
 </style>
