@@ -11,10 +11,6 @@ export default {
 </script>
 
 <style>
-/* * {
-  padding: 0;
-  margin: 0;
-} */
 html, body {
   width: 100%;
   height: 100%;
@@ -25,8 +21,8 @@ html, body {
 
 body {
   font-family: Source Sans Pro, 'PingFang SC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background: linear-gradient(135deg, rgb(65, 184, 131), rgb(74, 156, 238));
-  color: #fff;
+  /* background: linear-gradient(135deg, rgb(65, 184, 131), rgb(74, 156, 238)); */
+  /* color: #fff; */
   overflow-y: auto;
 }
 

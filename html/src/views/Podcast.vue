@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <div>
+    <header>
       <nav-bar></nav-bar>
-    </div>
+    </header>
     <div class="audio-player">
       <podcast-player :articleId="articleId"></podcast-player>
     </div>
@@ -40,6 +40,10 @@ export default {
   margin-right: auto;
   margin-bottom: 50px;
   padding: 0 15px;
+}
+
+header {
+  margin-bottom: 3rem;
 }
 
 a {

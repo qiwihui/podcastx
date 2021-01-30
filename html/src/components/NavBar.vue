@@ -1,58 +1,49 @@
 <template>
-  <div class="navbar">
+  <nav>
     <div class="container">
-      <h1 class="navbar-title"><a href="/">PodcastX</a></h1>
+      <h1 class="nav-title"><a href="/">PodcastX</a></h1>
     </div>
-  </div>
+  </nav>
 </template>
 
 <style scoped>
-/* * {
-  padding: 0;
-  margin: 0;
-} */
 
 h1 {
   font-size: 48px;
-  margin: 30px 0 10px;
 }
 
-.navbar {
+.nav {
   margin-bottom: 40px;
   color: #fff;
-  /* background: #42b983; */
-  /* height: 58px; */
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.navbar .container {
+.nav .container {
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* .navbar-nav {
-  display: flex;
-  flex-direction: row;
-  list-style: none;
-  align-items: center;
-} */
+.nav-title {
+  margin: 20px 0 10px;
+}
 
-.navbar-title a {
+.nav-title a {
   cursor: pointer;
 }
 
-.navbar-title a:link {
+.nav-title a:link {
   text-decoration: none;
 }
 
-.navbar-title a:visited {
+.nav-title a:visited {
   text-decoration: none;
-  color: #fff;
+  color: #000;
 }
 
 .nav-item {
