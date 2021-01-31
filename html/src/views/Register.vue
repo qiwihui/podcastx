@@ -5,7 +5,7 @@
     </header>
     <div class="login-container">
       <div class="login-panel">
-        <h2 class="title">欢迎回来！</h2>
+        <h2 class="title">欢迎来到 PodcastX</h2>
         <form>
           <input type="hidden" name="remember" value="true" />
           <div class="login-item">
@@ -22,7 +22,6 @@
           <div class="login-item">
             <div class="login-password mb-2">
               <label for="password" class="login-item-label">密码</label>
-              <a href="/password/reset" class="forget-password">忘记密码?</a>
             </div>
             <input
               name="password"
@@ -33,11 +32,11 @@
             />
           </div>
           <div>
-            <button type="submit">登录</button>
+            <button type="submit">注册</button>
             <div class="no-account">
               <p>
-                没有帐号？
-                <span class="register"><router-link :to="{name: 'Register'}" exact>注册</router-link></span>
+                已经有帐号？
+                <span class="register"><router-link :to="{name: 'Login'}" exact>登录</router-link></span>
               </p>
             </div>
           </div>
@@ -51,7 +50,7 @@
 import NavBar from '@/components/NavBar'
 import { mapActions } from 'vuex'
 export default {
-  name: 'Login',
+  name: 'Register',
   data () {
     return {
       form: {
@@ -62,7 +61,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['Login']),
+    ...mapActions(['Register']),
     async submit () {
       const User = new FormData()
       User.append('username', this.form.username)

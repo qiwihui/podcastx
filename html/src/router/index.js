@@ -4,6 +4,7 @@ import Home from '@/views/Home'
 import Podcast from '@/views/Podcast'
 import EmbedPodcast from '@/views/EmbedPodcast'
 import Login from '@/views/Login'
+import Register from '@/views/Register'
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/embed/:podcastId',
       name: 'EmbedPodcast',
       component: EmbedPodcast
+    },
+    {
+      path: '/Register',
+      name: 'Register',
+      component: Register
     },
     {
       path: '/login',

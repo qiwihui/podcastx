@@ -217,6 +217,7 @@ input[type="text"] {
 
 .search {
   flex: 1;
+  min-width: 70px;
   background-color: #42b983;
   /* height: 40px; */
   line-height: 40px;
