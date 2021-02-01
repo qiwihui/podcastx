@@ -99,7 +99,7 @@ export default {
       this.error_message = ''
       this.articleId = ''
       let urlData = { url: this.searchUrl }
-      await this.$http.post('/api/articles', urlData)
+      await this.$http.post('/api/example_articles', urlData)
         .then(response => response.data)
         .then(data => {
           if (data.status === 1) {

@@ -5,7 +5,7 @@ from database.models import User
 from flask_restful import Resource
 from resources.schema import RegisterSchema, LoginSchema
 from resources.utils import get_object
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_refresh_token_required, get_jwt_identity, create_refresh_token
 from mongoengine.queryset import Q
 
 
@@ -38,7 +38,7 @@ class Register(Resource):
 class Login(Resource):
     def post(self):
         data = request.get_json()
-        schema = LoginSchema(unknown='EXCLUDE')
+        schema = LoginSchema(unknown="EXCLUDE")
         try:
             validated_data = schema.load(data)
         except marshmallow.exceptions.ValidationError as error:
@@ -58,5 +58,20 @@ class Login(Resource):
             }, 200
 
         expires = datetime.timedelta(days=7)
-        access_token = create_access_token(identity=str(user.id), expires_delta=expires)
-        return {"status": 1, "msg": "ok", "token": access_token}, 200
+        return {
+            "status": 1,
+            "msg": "ok",
+            "data": {
+                "access_token": create_access_token(identity=str(user.id), expires_delta=expires),
+                "refresh_token": create_refresh_token(identity=str(user.id), expires_delta=expires),
+            },
+        }, 200
+
+
+class RefreshToken(Resource):
+    @jwt_refresh_token_required
+    def post(self):
+
+        current_user = get_jwt_identity()
+        ret = {"access_token": create_access_token(identity=current_user)}
+        return {"status": 1, "msg": "ok", "data": ret}, 200

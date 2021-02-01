@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     isLoggedIn: function () { return this.$store.getters.isAuthenticated },
-    username: function () { return this.$store.getters.StateUser }
+    username: function () { return this.$store.getters.stateUser }
   }
 }
 </script>

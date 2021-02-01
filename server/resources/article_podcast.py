@@ -42,9 +42,22 @@ class Article(Resource):
         return result, 200
 
 
-class Articles(Resource):
+class UserArticles(Resource):
 
-    # @jwt_required
+    @jwt_required
+    def get(self):
+        user_id = get_jwt_identity()
+        user = get_object(User, user_id)
+        articles = [json.loads(article.to_json()) for article in user.articles]
+
+        return {
+            "status": 1,
+            "msg": "ok",
+            "data": {"articles": articles},
+        }, 200
+
+
+    @jwt_required
     def post(self):
         data = request.get_json()
         schema = ArticleUrlSchema()
@@ -61,6 +74,27 @@ class Articles(Resource):
             user = get_object(User, user_id)
             if user:
                 user.update(add_to_set__articles=[ap])
+        if ap.status == 0:
+            task_fetch_url.delay(str(ap.id))
+        return {
+            "status": 1,
+            "msg": "ok",
+            "data": {"id": str(ap.id)},
+        }, 200
+
+
+class Articles(Resource):
+
+    def post(self):
+        data = request.get_json()
+        schema = ArticleUrlSchema()
+        try:
+            validated_data = schema.load(data)
+        except marshmallow.exceptions.ValidationError as error:
+            resp = {"status": 0, "msg": "error", "errors": error.messages}
+            return resp, 500
+        url = validated_data.get("url")
+        ap = create_article({"url": url})
         if ap.status == 0:
             task_fetch_url.delay(str(ap.id))
         return {

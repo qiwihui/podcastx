@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home'
 import Podcast from '@/views/Podcast'
+import Podcasts from '@/views/Podcasts'
 import EmbedPodcast from '@/views/EmbedPodcast'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
@@ -20,6 +21,14 @@ export default new Router({
       path: '/podcasts/:podcastId',
       name: 'Podcast',
       component: Podcast
+    },
+    {
+      path: '/podcasts',
+      name: 'Podcasts',
+      component: Podcasts,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/embed/:podcastId',
