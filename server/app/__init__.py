@@ -4,10 +4,12 @@ from flask_restful import Api
 from flask_marshmallow import Marshmallow
 # from config import BaseConfig
 from flask_mongoengine import MongoEngine
+from flask_bcrypt import Bcrypt
 
 
 ma = Marshmallow()
 db = MongoEngine()
+bcrypt = Bcrypt()
 
 
 def create_app(BaseConfig):
@@ -21,6 +23,7 @@ def create_app(BaseConfig):
 
     ma.init_app(app)
     db.init_app(app)
+    bcrypt.init_app(app)
 
     return app
 

@@ -8,17 +8,9 @@ from database.models import Article as ArticleModel
 from database.utils import create_article, update_article
 from tasks import task_fetch_url
 from resources.schema import ArticleUrlSchema
+from resources.utils import get_object
 
 logger = logging.getLogger(__name__)
-
-
-def get_object(model, id):
-    try:
-        target = model.objects.get(id=id)
-    except DoesNotExist as e:
-        logger.error(e, exc_info=True)
-        target = None
-    return target
 
 
 class Article(Resource):
@@ -28,7 +20,9 @@ class Article(Resource):
             data = json.loads(article.to_json())
             data["audios"] = (
                 # [f"/media/{article.id}/{part}.mp3" for part in range(len(article.chuncks))] if article.status == 1 else []
-                [f"/media/{article.id}/full.mp3"] if article.status == 1 else []
+                [f"/media/{article.id}/full.mp3"]
+                if article.status == 1
+                else []
             )
         else:
             data = {}

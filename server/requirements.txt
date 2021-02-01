@@ -3,6 +3,7 @@ flask_restful
 mongoengine
 flask-mongoengine
 flask-marshmallow
+flask-bcrypt
 requests
 python-dateutil
 # Data and workers.

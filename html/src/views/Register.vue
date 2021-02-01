@@ -1,20 +1,30 @@
 <template>
   <div class="container">
     <header>
-      <nav-bar :displayitems='false'></nav-bar>
+      <nav-bar :displayitems="false"></nav-bar>
     </header>
     <div class="login-container">
       <div class="login-panel">
         <h2 class="title">欢迎来到 PodcastX</h2>
-        <form>
-          <input type="hidden" name="remember" value="true" />
+        <form @submit.prevent="submit">
           <div class="login-item">
             <label for="email" class="login-item-label mb-2">邮箱</label>
             <input
               type="email"
               name="email"
+              v-model="form.email"
+              placeholder="username@example.com"
+              required="required"
+              autofocus="autofocus"
+            />
+          </div>
+          <div class="login-item">
+            <label for="username" class="login-item-label mb-2">用户名</label>
+            <input
+              type="text"
+              name="username"
               v-model="form.username"
-              placeholder="user@example.com"
+              placeholder="username"
               required="required"
               autofocus="autofocus"
             />
@@ -31,12 +41,17 @@
               required="required"
             />
           </div>
+          <div class="error mb-2" v-show="errorMessage!==''">{{ errorMessage }}</div>
           <div>
             <button type="submit">注册</button>
             <div class="no-account">
               <p>
                 已经有帐号？
-                <span class="register"><router-link :to="{name: 'Login'}" exact>登录</router-link></span>
+                <span class="register"
+                  ><router-link :to="{ name: 'Login' }" exact
+                    >登录</router-link
+                  ></span
+                >
               </p>
             </div>
           </div>
@@ -57,21 +72,26 @@ export default {
         username: '',
         password: ''
       },
-      showError: false
+      errorMessage: ''
     }
   },
   methods: {
     ...mapActions(['Register']),
     async submit () {
+      this.errorMessage = ''
       const User = new FormData()
+      User.append('email', this.form.email)
       User.append('username', this.form.username)
       User.append('password', this.form.password)
+      let self = this
       try {
-        await this.Login(User)
+        await this.Register(User).then(data => {
+          console.log(data)
+          self.errorMessage = data.msg
+        })
         // this.$router.push("/posts");
-        this.showError = false
       } catch (error) {
-        this.showError = true
+        this.errorMessage = '请求错误'
       }
     }
   },
@@ -82,7 +102,6 @@ export default {
 </script>
 
 <style scoped>
-
 .container {
   max-width: 48rem;
   margin-left: auto;
@@ -90,7 +109,8 @@ export default {
   padding: 0 15px;
 }
 
-input, button {
+input,
+button {
   box-sizing: border-box;
   border-width: 0px;
   border-style: solid;
@@ -167,6 +187,12 @@ button[type="submit"]:focus {
   outline: none;
 }
 
+.error {
+  color: rgba(252,129,129, 1);
+  text-align: center;
+  font-size: .75rem;
+}
+
 .forget-password {
   color: rgba(113, 128, 150, 1);
   font-size: 0.875rem;
@@ -183,7 +209,7 @@ button[type="submit"]:focus {
 }
 
 .no-account p {
-  color: rgba(113,128,150,1);
+  color: rgba(113, 128, 150, 1);
 }
 
 .register {
