@@ -4,6 +4,9 @@
       <a class="nav-title" href="/">PodcastX</a>
       <div class="nav-items" v-show="displayitems">
         <ul v-if="isLoggedIn">
+          <span>{{ username }}</span>
+        </ul>
+        <ul v-if="isLoggedIn">
           <a @click="logout">登出</a>
         </ul>
         <ul v-if="!isLoggedIn"><router-link :to="{name: 'Login'}" exact>登录</router-link></ul>
@@ -31,7 +34,8 @@ export default {
     }
   },
   computed: {
-    isLoggedIn: function () { return this.$store.getters.isAuthenticated }
+    isLoggedIn: function () { return this.$store.getters.isAuthenticated },
+    username: function () { return this.$store.getters.StateUser }
   }
 }
 </script>

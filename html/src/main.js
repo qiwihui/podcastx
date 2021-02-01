@@ -6,6 +6,21 @@ import router from './router'
 import store from './store'
 import VueGtag from 'vue-gtag'
 import VueAPlayer from 'vue-aplayer'
+import axios from 'axios'
+
+axios.defaults.withCredentials = true
+// axios.defaults.baseURL = "https://podcastx.qiwihui.com/"
+
+axios.interceptors.response.use(undefined, function (error) {
+  if (error) {
+    const originalRequest = error.config
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
+      store.dispatch('Logout')
+      return router.push('/login')
+    }
+  }
+})
 
 VueAPlayer.disableVersionBadge = true
 
