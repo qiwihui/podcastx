@@ -9,6 +9,7 @@ from database.utils import create_article, update_article
 from tasks import task_fetch_url
 from resources.schema import ArticleUrlSchema
 from resources.utils import get_object
+from flask_jwt_extended import jwt_required
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +31,7 @@ class Article(Resource):
         result = {"status": 1, "msg": "ok", "data": data}
         return result, 200
 
+    @jwt_required
     def delete(self, article_id):
         article = get_object(ArticleModel, article_id)
         if article:

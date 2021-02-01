@@ -15,6 +15,17 @@ Vue.use(VueGtag, {
   config: { id: 'G-T9V2FSEG0Q' }
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.isAuthenticated) {
+      next()
+      return
+    }
+    next('/login')
+  }
+  next()
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

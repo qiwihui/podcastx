@@ -3,6 +3,7 @@ import os
 
 class BaseConfig(object):
     SECRET_KEY = os.getenv("SECRET_KEY", None)
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", None)
     DEBUG = os.getenv("DEBUG", False)
     # redis
     REDIS_HOST = os.getenv("REDIS_HOST", "127.0.0.1")

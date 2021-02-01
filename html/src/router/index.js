@@ -19,7 +19,10 @@ export default new Router({
     {
       path: '/podcasts/:podcastId',
       name: 'Podcast',
-      component: Podcast
+      component: Podcast,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/embed/:podcastId',

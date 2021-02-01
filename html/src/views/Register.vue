@@ -41,9 +41,19 @@
               required="required"
             />
           </div>
-          <div class="error mb-2" v-show="errorMessage!==''">{{ errorMessage }}</div>
+          <div class="error mb-2" v-show="errorMessage !== ''">
+            {{ errorMessage }}
+          </div>
+          <div class="error mb-2" v-show="successMessage !== ''">
+            {{ successMessage }}
+          </div>
           <div>
-            <button type="submit">注册</button>
+            <button type="submit">
+              <span v-if="loading == false">注册</span>
+              <span v-else>
+                <spinner size="15"></spinner>
+              </span>
+            </button>
             <div class="no-account">
               <p>
                 已经有帐号？
@@ -62,41 +72,52 @@
 </template>
 
 <script>
+import Spinner from 'vue-simple-spinner'
 import NavBar from '@/components/NavBar'
 import { mapActions } from 'vuex'
 export default {
   name: 'Register',
-  data () {
+  data() {
     return {
       form: {
         username: '',
         password: ''
       },
-      errorMessage: ''
+      errorMessage: '',
+      successMessage: '',
+      loading: false
     }
   },
   methods: {
     ...mapActions(['Register']),
-    async submit () {
+    async submit() {
+      this.loading = true
       this.errorMessage = ''
-      const User = new FormData()
-      User.append('email', this.form.email)
-      User.append('username', this.form.username)
-      User.append('password', this.form.password)
+      const userObject = {
+        email: this.form.email,
+        username: this.form.username,
+        password: this.form.password
+      }
       let self = this
       try {
-        await this.Register(User).then(data => {
-          console.log(data)
-          self.errorMessage = data.msg
+        await this.Register(userObject).then(data => {
+          if (data.status === 1) {
+            self.successMessage = '注册成功'
+            this.$router.push('/')
+          } else {
+            self.errorMessage = data.msg
+          }
         })
-        // this.$router.push("/posts");
+        this.loading = false
       } catch (error) {
+        this.loading = false
         this.errorMessage = '请求错误'
       }
     }
   },
   components: {
-    NavBar
+    NavBar,
+    Spinner
   }
 }
 </script>
@@ -188,9 +209,15 @@ button[type="submit"]:focus {
 }
 
 .error {
-  color: rgba(252,129,129, 1);
+  color: rgba(252, 129, 129, 1);
   text-align: center;
-  font-size: .75rem;
+  font-size: 0.75rem;
+}
+
+.success {
+  color: rgb(66, 185, 131);
+  text-align: center;
+  font-size: 0.75rem;
 }
 
 .forget-password {

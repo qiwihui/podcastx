@@ -5,11 +5,13 @@ from flask_marshmallow import Marshmallow
 # from config import BaseConfig
 from flask_mongoengine import MongoEngine
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
 
 
 ma = Marshmallow()
 db = MongoEngine()
 bcrypt = Bcrypt()
+jwt = JWTManager()
 
 
 def create_app(BaseConfig):
@@ -24,6 +26,7 @@ def create_app(BaseConfig):
     ma.init_app(app)
     db.init_app(app)
     bcrypt.init_app(app)
+    jwt.init_app(app)
 
     return app
 

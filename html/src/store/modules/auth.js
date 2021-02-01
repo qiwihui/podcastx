@@ -1,6 +1,7 @@
 import axios from 'axios'
 const state = {
-  user: null
+  user: null,
+  token: null
 }
 const getters = {
   isAuthenticated: state => !!state.user,
@@ -8,32 +9,26 @@ const getters = {
 }
 const actions = {
   async Login ({ commit }, User) {
-    await axios.post('/api/login', User)
-    await commit('setUser', User.get('username'))
-  },
-  async Register ({ dispatch }, form) {
-    let object = {}
-    form.forEach((value, key) => { object[key] = value })
-
-    return axios.post('/api/register', object).then((response) => {
+    return axios.post('/api/login', User).then((response) => {
       let data = response.data
       if (data.status === 1) {
-        let UserForm = new FormData()
-        UserForm.append('username', form.username)
-        UserForm.append('password', form.password)
-        return dispatch('Login', UserForm)
+        commit('setToken', data.token)
+        commit('setUser', User.username)
+      }
+      return data
+    })
+  },
+  async Register ({ dispatch }, userObject) {
+    return axios.post('/api/register', userObject).then((response) => {
+      let data = response.data
+      if (data.status === 1) {
+        return dispatch('Login', userObject)
       } else {
         return data
       }
     }).catch((error) => {
       console.error(error)
     })
-
-    // let UserForm = new FormData()
-    // UserForm.append('email', form.email)
-    // UserForm.append('username', form.username)
-    // UserForm.append('password', form.password)
-    // await dispatch('Login', UserForm)
   },
   async Logout ({commit}) {
     let user = null
@@ -44,8 +39,12 @@ const mutations = {
   setUser (state, username) {
     state.user = username
   },
+  setToken (state, token) {
+    state.token = token
+  },
   logout (state) {
     state.user = null
+    state.token = null
   }
 }
 export default {

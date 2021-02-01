@@ -6,13 +6,13 @@
     <div class="login-container">
       <div class="login-panel">
         <h2 class="title">欢迎回来！</h2>
-        <form>
+        <form @submit.prevent="submit">
           <input type="hidden" name="remember" value="true" />
           <div class="login-item">
-            <label for="email" class="login-item-label mb-2">邮箱</label>
+            <label for="username" class="login-item-label mb-2">邮箱</label>
             <input
-              type="email"
-              name="email"
+              type="text"
+              name="username"
               v-model="form.username"
               placeholder="user@example.com"
               required="required"
@@ -32,8 +32,15 @@
               required="required"
             />
           </div>
+          <div class="error mb-2" v-show="errorMessage!==''">{{ errorMessage }}</div>
+          <div class="success mb-2" v-show="successMessage!==''">{{ successMessage }}</div>
           <div>
-            <button type="submit">登录</button>
+            <button type="submit">
+              <span v-if="loading == false">登录</span>
+              <span v-else>
+                <spinner size="15"></spinner>
+              </span>
+            </button>
             <div class="no-account">
               <p>
                 没有帐号？
@@ -48,6 +55,7 @@
 </template>
 
 <script>
+import Spinner from 'vue-simple-spinner'
 import NavBar from '@/components/NavBar'
 import { mapActions } from 'vuex'
 export default {
@@ -58,26 +66,39 @@ export default {
         username: '',
         password: ''
       },
-      showError: false
+      errorMessage: '',
+      successMessage: '',
+      loading: false
     }
   },
   methods: {
     ...mapActions(['Login']),
     async submit () {
-      const User = new FormData()
-      User.append('username', this.form.username)
-      User.append('password', this.form.password)
+      this.loading = true
+      const userObject = {
+        username: this.form.username,
+        password: this.form.password
+      }
+      let self = this
       try {
-        await this.Login(User)
-        // this.$router.push("/posts");
-        this.showError = false
+        await this.Login(userObject).then(data => {
+          if (data.status !== 1) {
+            this.loading = false
+            self.errorMessage = data.msg
+          } else {
+            self.successMessage = '登录成功'
+            this.$router.push('/')
+          }
+        })
       } catch (error) {
-        this.showError = true
+        this.errorMessage = ''
+        this.loading = false
       }
     }
   },
   components: {
-    NavBar
+    NavBar,
+    Spinner
   }
 }
 </script>
@@ -112,13 +133,11 @@ input, button {
 
 .login-panel {
   width: 80%;
-  /* padding: 0 2rem; */
 }
 
 .title {
   text-align: center;
   font-size: 1.5rem;
-  /* padding: 1.5rem 0; */
 }
 
 .login-item {
@@ -166,6 +185,18 @@ button[type="submit"] {
 }
 button[type="submit"]:focus {
   outline: none;
+}
+
+.error {
+  color: rgba(252,129,129, 1);
+  text-align: center;
+  font-size: .75rem;
+}
+
+.success {
+  color: rgb(66, 185, 131);
+  text-align: center;
+  font-size: 0.75rem;
 }
 
 .forget-password {

@@ -1,5 +1,5 @@
 from resources.article_podcast import Article, ArticleAudios, Articles
-from resources.auth import Register
+from resources.auth import Register, Login
 
 def initialize_routes(api):
     # article
@@ -9,4 +9,4 @@ def initialize_routes(api):
     
     # auth
     api.add_resource(Register, "/api/register")
-    # api.add_resource(Login, "/api/login")
+    api.add_resource(Login, "/api/login")
