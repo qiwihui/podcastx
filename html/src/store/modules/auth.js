@@ -1,11 +1,13 @@
-import axios from 'axios'
+import axios from '@/lib/axios'
+
 const state = {
   user: null,
   token: null
 }
 const getters = {
   isAuthenticated: state => !!state.user,
-  StateUser: state => state.user
+  StateUser: state => state.user,
+  StateToken: state => state.token
 }
 const actions = {
   async Login ({ commit }, User) {

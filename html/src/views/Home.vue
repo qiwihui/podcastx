@@ -94,20 +94,13 @@ export default {
   },
   mounted () {},
   methods: {
-    extractUrl () {
+    async extractUrl () {
       this.loading = true
       this.error_message = ''
       this.articleId = ''
-      let data = { url: this.searchUrl }
-      fetch('/api/articles', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-        .then(res => res.json())
+      let urlData = { url: this.searchUrl }
+      await this.$http.post('/api/articles', urlData)
+        .then(response => response.data)
         .then(data => {
           if (data.status === 1) {
             this.articleId = data.data.id
@@ -116,10 +109,10 @@ export default {
           }
           this.loading = false
         })
-        .catch(() => {
+        .catch((error) => {
           this.error_message = '请求错误，请稍后重试'
           this.loading = false
-          //   console.error(error)
+          console.error(error)
         })
         .finally(() => {
           this.loading = false

@@ -2,14 +2,15 @@ import json
 import logging
 import marshmallow
 from flask import jsonify
-from mongoengine.errors import DoesNotExist
 from flask_restful import Resource, request
-from database.models import Article as ArticleModel
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from mongoengine.errors import DoesNotExist
+from database.models import Article as ArticleModel, User
 from database.utils import create_article, update_article
-from tasks import task_fetch_url
 from resources.schema import ArticleUrlSchema
 from resources.utils import get_object
-from flask_jwt_extended import jwt_required
+from tasks import task_fetch_url
+
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,8 @@ class Article(Resource):
 
 
 class Articles(Resource):
+
+    # @jwt_required
     def post(self):
         data = request.get_json()
         schema = ArticleUrlSchema()
@@ -52,13 +55,19 @@ class Articles(Resource):
             return resp, 500
         url = validated_data.get("url")
         ap = create_article({"url": url})
+        # add article to user
+        user_id = get_jwt_identity()
+        if user_id:
+            user = get_object(User, user_id)
+            if user:
+                user.update(add_to_set__articles=[ap])
         if ap.status == 0:
             task_fetch_url.delay(str(ap.id))
         return {
             "status": 1,
             "msg": "ok",
             "data": {"id": str(ap.id)},
-        }, 201
+        }, 200
 
 
 class ArticleAudios(Resource):
