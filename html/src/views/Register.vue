@@ -77,7 +77,7 @@ import NavBar from '@/components/NavBar'
 import { mapActions } from 'vuex'
 export default {
   name: 'Register',
-  data() {
+  data () {
     return {
       form: {
         username: '',
@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     ...mapActions(['Register']),
-    async submit() {
+    async submit () {
       this.loading = true
       this.errorMessage = ''
       const userObject = {
