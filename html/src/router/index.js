@@ -27,7 +27,7 @@ export default new Router({
       name: 'Podcasts',
       component: Podcasts,
       meta: {
-        requireAuth: true
+        requiresAuth: true
       }
     },
     {
