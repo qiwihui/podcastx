@@ -31,9 +31,10 @@
       <div class="podcast-community">
         <div class="action-button like">
           <div class="action-button-content">
-            <img src="../assets/heart.svg" />
+            <img src="../assets/heart.svg" @click="like" v-if="isLiking==true"/>
+            <img src="../assets/red-heart.svg" @click="unlike" v-else />
             <div class="action-button-text">
-              <span class="like-count-unliked">13</span>
+              <span class="like-count-unliked">{{ podcast.likes_count }}</span>
             </div>
           </div>
         </div>
@@ -69,9 +70,34 @@ export default {
     return {
     }
   },
+  methods: {
+    async like () {
+      await this.$http
+        .post('/api/articles/' + this.podcast.id, { action: 'like' })
+        .then(response => {
+          let data = response.data
+          if (data.status === 1) {
+            this.pose.likes_count = data.data.likes_count
+          }
+        })
+    },
+    async unlike () {
+      await this.$http
+        .post('/api/articles/' + this.podcast.id, { action: 'unlike' })
+        .then(response => {
+          let data = response.data
+          if (data.status === 1) {
+            this.pose.likes_count = data.data.likes_count
+          }
+        })
+    }
+  },
   computed: {
     podcastDescription: function () {
       return this.podcast.content
+    },
+    isLiking: function () {
+      return false
     }
   }
 }
