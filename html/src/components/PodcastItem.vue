@@ -39,7 +39,7 @@
         </div>
         <a
           native="true"
-          href="https://stories.substack.com/p/substack-podcast-022-pandemic-economics/comments"
+          :href="'/podcasts/' + podcast.id + '/comments'"
           target="_blank"
         >
           <div class="action-button action-button-comment none">
@@ -79,7 +79,6 @@ export default {
 
 <style scoped>
 .podcast {
-  max-width: 40.5rem;
   padding: 1.75rem 0;
   line-height: 130%;
   cursor: pointer;

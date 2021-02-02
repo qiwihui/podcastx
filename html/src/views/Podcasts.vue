@@ -3,9 +3,10 @@
     <header>
       <nav-bar></nav-bar>
     </header>
-    <div class="audio-player">
-      <!-- <podcast-player v-for='article in articles' :key='article._id.$oid' :articleId="article._id.$oid"></podcast-player> -->
-      <podcast-item v-for='article in articles' :key='article._id' :podcast='article'></podcast-item>
+    <div class="audio-list">
+      <div class="audio-item">
+        <podcast-item v-for='article in articles' :key='article._id' :podcast='article'></podcast-item>
+      </div>
     </div>
   </div>
 </template>
@@ -46,7 +47,7 @@ export default {
 
 <style scoped>
 .container {
-  max-width: 40rem;
+  max-width: 48rem;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 50px;
@@ -61,9 +62,16 @@ a {
   color: #42b983;
 }
 
-.audio-player {
+.audio-list {
   width: 100%;
   max-width: 960px;
   margin: 0 auto 30px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.audio-item {
+  width: 100%;
 }
 </style>
