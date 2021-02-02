@@ -1,6 +1,7 @@
 flask
 flask_restful
 mongoengine
+mongoengine_goodjson
 flask-mongoengine
 flask-marshmallow
 flask-bcrypt
