@@ -81,6 +81,7 @@ class UserArticles(Resource):
                 **json.loads(article.to_json()),
                 "likes_count": article.likes_count,
                 "content": article.content[:100] if article.content else "",
+                "like": 1 if article.check_like(user) else 0,
             }
             for article in user.articles[page * per_page : (page + 1) * per_page]
         ]

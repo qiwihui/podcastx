@@ -31,7 +31,7 @@
       <div class="podcast-community">
         <div class="action-button like">
           <div class="action-button-content">
-            <img src="../assets/heart.svg" @click="like" v-if="isLiking==true"/>
+            <img src="../assets/heart.svg" @click="like" v-if="podcast.like===1"/>
             <img src="../assets/red-heart.svg" @click="unlike" v-else />
             <div class="action-button-text">
               <span class="like-count-unliked">{{ podcast.likes_count }}</span>
@@ -95,9 +95,6 @@ export default {
   computed: {
     podcastDescription: function () {
       return this.podcast.content
-    },
-    isLiking: function () {
-      return false
     }
   }
 }

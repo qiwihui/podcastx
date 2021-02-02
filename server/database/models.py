@@ -31,6 +31,9 @@ class Article(gj.Document, db.Document):
     @property
     def likes_count(self):
         return len(self.likes)
+    
+    def check_like(self, user):
+        return user in self.likes
 
 
 class User(gj.Document, db.Document):
