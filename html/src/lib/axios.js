@@ -21,7 +21,6 @@ axios.interceptors.response.use(
     ) {
       throw new Error()
     }
-    console.error('error occurred.1')
     return response
   },
   async function (error) {

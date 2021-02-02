@@ -7,6 +7,7 @@ import store from './store'
 import VueGtag from 'vue-gtag'
 import VueAPlayer from 'vue-aplayer'
 import axios from './lib/axios'
+import moment from 'moment'
 
 Vue.prototype.$http = axios
 
@@ -27,6 +28,12 @@ router.beforeEach((to, from, next) => {
     next('/login')
   }
   next()
+})
+
+Vue.filter('formatDate', function (value) {
+  if (value) {
+    return moment(String(value)).format('MM/DD/YYYY')
+  }
 })
 
 /* eslint-disable no-new */

@@ -4,7 +4,8 @@
       <nav-bar></nav-bar>
     </header>
     <div class="audio-player">
-      <podcast-player v-for='article in articles' :key='article._id.$oid' :articleId="article._id.$oid"></podcast-player>
+      <!-- <podcast-player v-for='article in articles' :key='article._id.$oid' :articleId="article._id.$oid"></podcast-player> -->
+      <podcast-item v-for='article in articles' :key='article._id' :podcast='article'></podcast-item>
     </div>
   </div>
 </template>
@@ -12,6 +13,7 @@
 <script>
 import NavBar from '@/components/NavBar'
 import PodcastPlayer from '@/components/PodcastPlayer'
+import PodcastItem from '@/components/PodcastItem'
 export default {
   name: 'Podcasts',
   data () {
@@ -36,7 +38,8 @@ export default {
   },
   components: {
     NavBar,
-    PodcastPlayer
+    PodcastPlayer,
+    PodcastItem
   }
 }
 </script>

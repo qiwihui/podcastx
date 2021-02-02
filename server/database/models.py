@@ -1,9 +1,10 @@
 import datetime
 from app import db
 from flask_bcrypt import generate_password_hash, check_password_hash
+import mongoengine_goodjson as gj
 
 
-class Article(db.Document):
+class Article(gj.Document):
 
     url = db.URLField()
     author = db.StringField(default="")
@@ -27,7 +28,7 @@ class Article(db.Document):
     }
 
 
-class User(db.Document):
+class User(gj.Document):
 
     username = db.StringField(required=True, unique=True)
     email = db.EmailField(required=True, unique=True)

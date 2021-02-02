@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "hls.js": "^0.14.17",
+    "moment": "^2.29.1",
     "vue": "^2.5.2",
     "vue-aplayer": "^1.6.1",
     "vue-gtag": "^1.10.0",
