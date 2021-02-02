@@ -4,7 +4,7 @@
       <a class="nav-title" href="/">PodcastX</a>
       <div class="nav-items" v-show="displayitems">
         <ul v-if="isLoggedIn">
-          <span>{{ username }}</span>
+          <span><a href="/podcasts">{{ username }}</a></span>
         </ul>
         <ul v-if="isLoggedIn">
           <a @click="logout">登出</a>
