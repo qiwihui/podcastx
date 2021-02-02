@@ -4,11 +4,11 @@ from flask_bcrypt import generate_password_hash, check_password_hash
 import mongoengine_goodjson as gj
 
 
-class Article(gj.Document):
+class Article(gj.Document, db.Document):
 
     url = db.URLField()
     author = db.StringField(default="")
-    chuncks = db.ListField(db.StringField(), default=list)
+    chuncks = db.ListField(db.StringField(), default=list, exclude_to_json=True)
     content = db.StringField(default="")
     domain = db.StringField(default="")
     title = db.StringField(default="")
@@ -17,6 +17,7 @@ class Article(gj.Document):
     image = db.URLField(required=False)
     # owner = None
     status = db.IntField(default=0, min_value=0, max_value=3)
+    likes = db.ListField(db.ReferenceField("User"), default=list, exclude_to_json=True)
 
     meta = {
         "collection": "article",
@@ -27,8 +28,12 @@ class Article(gj.Document):
         ],
     }
 
+    @property
+    def likes_count(self):
+        return len(self.likes)
 
-class User(gj.Document):
+
+class User(gj.Document, db.Document):
 
     username = db.StringField(required=True, unique=True)
     email = db.EmailField(required=True, unique=True)
@@ -36,9 +41,7 @@ class User(gj.Document):
 
     articles = db.ListField(db.ReferenceField(Article), default=list)
 
-    meta = {
-        "collection": "user"
-    }
+    meta = {"collection": "user"}
 
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode("utf8")

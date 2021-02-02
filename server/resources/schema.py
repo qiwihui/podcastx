@@ -35,3 +35,10 @@ class LoginSchema(ma.Schema):
     def validate_username(self, value):
         if not get_object(User, value, "username") and not get_object(User, value, "email"):
             raise ValidationError("用户不存在存在")
+
+
+class ArticleActionSchema(ma.Schema):
+
+    action = fields.String(
+        required=True, validate=validate.OneOf(["like", "unlike"]), error_messages=error_messages("操作")
+    )

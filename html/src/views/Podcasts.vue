@@ -4,7 +4,7 @@
       <nav-bar></nav-bar>
     </header>
     <!-- <h2 class="podcast-list">添加</h2> -->
-    <search class="search-container mb-4" :endpoint='"/api/articles"' @articleChanged="updateArticle"></search>
+    <search class="search-container mb-4" :endpoint='endpoint' @articleChanged="updateArticle"></search>
     <section class="audio-player mb-4">
       <podcast-player
         autoplay
@@ -20,7 +20,7 @@
         <div class="audio-item">
           <podcast-item
             v-for="article in articles"
-            :key="article._id"
+            :key="article.id"
             :podcast="article"
           ></podcast-item>
         </div>
@@ -41,7 +41,8 @@ export default {
       error_message: '',
       loading: false,
       articles: [],
-      articleId: ''
+      articleId: '',
+      endpoint: '/api/articles'
     }
   },
   mounted () {
@@ -51,7 +52,7 @@ export default {
     getArticles () {
       let self = this
       this.$http
-        .get('/api/articles')
+        .get(this.endpoint)
         .then(response => {
           let data = response.data
           self.articles = data.data.articles

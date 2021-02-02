@@ -34,11 +34,6 @@ def create_app(BaseConfig):
 def add_api_support(app):
 
     api = Api(app)
-    # celery_app = create_celery_app(app)
-    # ma = Marshmallow(app)
-
-    # from database.db import initialize_db
-    # initialize_db(app)
 
     from resources.routes import initialize_routes
     initialize_routes(api)
