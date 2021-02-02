@@ -3,9 +3,27 @@
     <header>
       <nav-bar></nav-bar>
     </header>
-    <div class="audio-list">
-      <div class="audio-item">
-        <podcast-item v-for='article in articles' :key='article._id' :podcast='article'></podcast-item>
+    <!-- <h2 class="podcast-list">添加</h2> -->
+    <search class="search-container mb-4" :endpoint='"/api/articles"' @articleChanged="updateArticle"></search>
+    <section class="audio-player mb-4">
+      <podcast-player
+        autoplay
+        theme="pic"
+        show-lrc
+        :articleId="articleId"
+        v-if="articleId != ''"
+      ></podcast-player>
+    </section>
+    <h2 class="podcast-list">播客列表</h2>
+    <div class="podcast-cat">
+      <div class="audio-list">
+        <div class="audio-item">
+          <podcast-item
+            v-for="article in articles"
+            :key="article._id"
+            :podcast="article"
+          ></podcast-item>
+        </div>
       </div>
     </div>
   </div>
@@ -13,15 +31,17 @@
 
 <script>
 import NavBar from '@/components/NavBar'
-import PodcastPlayer from '@/components/PodcastPlayer'
 import PodcastItem from '@/components/PodcastItem'
+import PodcastPlayer from '@/components/PodcastPlayer'
+import Search from '@/components/Search'
 export default {
   name: 'Podcasts',
   data () {
     return {
       error_message: '',
       loading: false,
-      articles: []
+      articles: [],
+      articleId: ''
     }
   },
   mounted () {
@@ -30,17 +50,24 @@ export default {
   methods: {
     getArticles () {
       let self = this
-      this.$http.get('/api/articles').then(response => {
-        let data = response.data
-        self.articles = data.data.articles
-        console.log(self.articles)
-      }).catch(() => {})
+      this.$http
+        .get('/api/articles')
+        .then(response => {
+          let data = response.data
+          self.articles = data.data.articles
+          console.log(self.articles)
+        })
+        .catch(() => {})
+    },
+    updateArticle (e) {
+      this.articleId = e
     }
   },
   components: {
     NavBar,
-    PodcastPlayer,
-    PodcastItem
+    PodcastItem,
+    Search,
+    PodcastPlayer
   }
 }
 </script>
@@ -60,6 +87,21 @@ header {
 
 a {
   color: #42b983;
+}
+
+.mb-4 {
+  margin-bottom: 40px;
+}
+
+.podcast-cat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.podcast-list {
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 .audio-list {
