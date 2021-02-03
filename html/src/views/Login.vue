@@ -87,7 +87,7 @@ export default {
             self.errorMessage = data.msg
           } else {
             self.successMessage = '登录成功'
-            this.$router.push('/')
+            this.$router.push({name: 'Podcasts'})
           }
         })
       } catch (error) {

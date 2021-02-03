@@ -56,12 +56,19 @@
             <div class="action-button-text"></div>
           </div>
         </div> -->
+        <div class="action-button share">
+          <div class="action-button-content">
+            <img src="../assets/trash.svg" @click="delPodcast" v-if="deleteLoading==false"/>
+            <span v-else><spinner size="18"></spinner></span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Spinner from 'vue-simple-spinner'
 import Heart from '@/components/icons/Heart'
 export default {
   name: 'PodcastItem',
@@ -70,6 +77,7 @@ export default {
   },
   data () {
     return {
+      deleteLoading: false
     }
   },
   methods: {
@@ -91,8 +99,22 @@ export default {
           let data = response.data
           if (data.status === 1) {
             this.podcast.likes_count = data.data.likes_count
-            this.podcast.like = 1
+            this.podcast.like = 0
           }
+        })
+    },
+    async delPodcast () {
+      this.deleteLoading = true
+      await this.$http
+        .delete('/api/articles/' + this.podcast.id)
+        .then(response => {
+          let data = response.data
+          if (data.status === 1) {
+            this.$destroy()
+            this.$el.parentNode.removeChild(this.$el)
+          }
+        }).finally(() => {
+          this.deleteLoading = false
         })
     }
   },
@@ -102,7 +124,8 @@ export default {
     }
   },
   components: {
-    Heart
+    Heart,
+    Spinner
   }
 }
 </script>
