@@ -56,7 +56,6 @@ export default {
         .then(response => {
           let data = response.data
           self.articles = data.data.articles
-          console.log(self.articles)
         })
         .catch(() => {})
     },

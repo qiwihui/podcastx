@@ -1,5 +1,5 @@
 <template>
-  <div class="podcast" :href="'/podcasts/' + podcast.id" target="_blank">
+  <div class="podcast">
     <div class="podcast-art">
       <div
         class="podcast-art-image"
@@ -31,8 +31,8 @@
       <div class="podcast-community">
         <div class="action-button like">
           <div class="action-button-content">
-            <img src="../assets/heart.svg" @click="like" v-if="podcast.like===0"/>
-            <img src="../assets/red-heart.svg" @click="unlike" v-else />
+            <heart :fill='"#fd6752"' :stroke='"#fd6752"' @click.native="doUnlike" v-if="podcast.like==1"></heart>
+            <heart :fill='"none"' :stroke='"#000"' @click.native="doLike" v-else></heart>
             <div class="action-button-text">
               <span class="like-count-unliked">{{ podcast.likes_count }}</span>
             </div>
@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import Heart from '@/components/icons/Heart'
 export default {
   name: 'PodcastItem',
   props: {
@@ -72,7 +73,7 @@ export default {
     }
   },
   methods: {
-    async like () {
+    async doLike () {
       await this.$http
         .post('/api/articles/' + this.podcast.id, { action: 'like' })
         .then(response => {
@@ -83,7 +84,7 @@ export default {
           }
         })
     },
-    async unlike () {
+    async doUnlike () {
       await this.$http
         .post('/api/articles/' + this.podcast.id, { action: 'unlike' })
         .then(response => {
@@ -99,6 +100,9 @@ export default {
     podcastDescription: function () {
       return this.podcast.content
     }
+  },
+  components: {
+    Heart
   }
 }
 </script>
@@ -232,14 +236,6 @@ a {
   display: flex;
   align-items: center;
   padding: 0.3125rem 0;
-}
-
-.action-button svg {
-  height: 20px;
-  width: 20px;
-  stroke-width: 1px;
-  fill: transparent;
-  stroke: #78706c;
 }
 
 .action-button .action-button-text {
