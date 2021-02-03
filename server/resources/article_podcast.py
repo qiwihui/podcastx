@@ -3,8 +3,8 @@ import logging
 import marshmallow
 from flask_restful import Resource, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from database.models import Article as ArticleModel, User
-from database.utils import create_article, update_article
+from database.models import Article as ArticleDoc, User, UserArticle as UserArticleDoc
+from database.utils import create_article, update_article, user_add_article, user_delete_article
 from resources.schema import ArticleUrlSchema, ArticleActionSchema
 from resources.utils import get_object
 from tasks import task_fetch_url
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class Article(Resource):
     def get(self, article_id):
-        article = get_object(ArticleModel, article_id)
+        article = get_object(ArticleDoc, article_id)
         if article:
             data = json.loads(article.to_json())
             data["likes_count"] = article.likes_count
@@ -29,6 +29,7 @@ class Article(Resource):
 
     @jwt_required
     def post(self, article_id):
+        """like and unlike"""
         data = request.get_json()
 
         schema = ArticleActionSchema(unknown="EXCLUDE")
@@ -41,7 +42,7 @@ class Article(Resource):
             resp = {"status": 0, "msg": message, "errors": error.messages}
             return resp, 200
 
-        article = get_object(ArticleModel, article_id)
+        article = get_object(ArticleDoc, article_id)
         if article:
             user_id = get_jwt_identity()
             user = get_object(User, user_id)
@@ -50,7 +51,7 @@ class Article(Resource):
                 article.update(pull__likes=user)
             elif action == "like":
                 article.update(add_to_set__likes=[user])
-            article = get_object(ArticleModel, article_id)
+            article = get_object(ArticleDoc, article_id)
             result = {"status": 1, "msg": "ok", "data": {"likes_count": len(article.likes)}}
             return result, 200
         else:
@@ -59,13 +60,15 @@ class Article(Resource):
 
     @jwt_required
     def delete(self, article_id):
+        """删除"""
         user_id = get_jwt_identity()
         user = get_object(User, user_id)
-        article = get_object(ArticleModel, article_id)
+        article = get_object(ArticleDoc, article_id)
+        ok = False
         if article:
-            user.update(pull__articles=article)
+            ok = user_delete_article(user, article)
 
-        result = {"status": 1, "msg": "ok"}
+        result = {"status": 1 if ok else 0, "msg": "ok" if ok else "error"}
         return result, 200
 
 
@@ -76,17 +79,18 @@ class UserArticles(Resource):
         user = get_object(User, user_id)
         page = int(request.args.get("page", 0))
         per_page = int(request.args.get("per_page", 10))
+        
+        user_articles = UserArticleDoc.objects(user=user).order_by('-created_at')
         articles = [
             {
-                **json.loads(article.to_json()),
-                "likes_count": article.likes_count,
-                "content": article.content[:100] if article.content else "",
-                "like": 1 if article.check_like(user) else 0,
-                "audios": [f"/media/{article.id}/full.mp3"] if article.status == 1 else []
+                **json.loads(ua.article.to_json()),
+                "likes_count": ua.article.likes_count,
+                "content": ua.article.content[:100] if ua.article.content else "",
+                "like": 1 if ua.article.check_like(user) else 0,
+                "audios": [f"/media/{ua.article.id}/full.mp3"] if ua.article.status == 1 else []
             }
-            for article in user.articles[::-1][page * per_page : (page + 1) * per_page]
+            for ua in user_articles[page * per_page : (page + 1) * per_page]
         ]
-
         return {
             "status": 1,
             "msg": "ok",
@@ -106,18 +110,18 @@ class UserArticles(Resource):
             resp = {"status": 0, "msg": message, "errors": error.messages}
             return resp, 500
         url = validated_data.get("url")
-        ap = create_article({"url": url})
+        article = create_article({"url": url})
         # add article to user
         user_id = get_jwt_identity()
         if user_id:
             user = get_object(User, user_id)
-            user.update(add_to_set__articles=[ap])
-        if ap.status == 0:
-            task_fetch_url.delay(str(ap.id))
+            user_add_article(user, article)
+        if article.status == 0:
+            task_fetch_url.delay(str(article.id))
         return {
             "status": 1,
             "msg": "ok",
-            "data": {"id": str(ap.id)},
+            "data": {"id": str(article.id)},
         }, 200
 
 
@@ -143,7 +147,7 @@ class Articles(Resource):
 
 class ArticleAudios(Resource):
     def get(self, article_id):
-        article = get_object(ArticleModel, article_id)
+        article = get_object(ArticleDoc, article_id)
         if article:
             return {
                 "status": 1,

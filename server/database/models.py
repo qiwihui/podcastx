@@ -42,8 +42,6 @@ class User(gj.Document, db.Document):
     email = db.EmailField(required=True, unique=True)
     password = db.StringField(required=True, min_length=6)
 
-    articles = db.ListField(db.ReferenceField(Article), default=list)
-
     meta = {"collection": "user"}
 
     def hash_password(self):
@@ -51,3 +49,12 @@ class User(gj.Document, db.Document):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
+
+class UserArticle(gj.Document, db.Document):
+
+    user = db.ReferenceField(User)
+    article = db.ReferenceField(Article)
+    created_at = db.DateTimeField(default=datetime.datetime.utcnow)
+
+    meta = {"collection": "user_article"}
