@@ -26,12 +26,13 @@ class Article(gj.Document, db.Document):
             "$url",  # text index
             "#url",  # hashed index
         ],
+        "strict": False,
     }
 
     @property
     def likes_count(self):
         return len(self.likes) if self.likes else 0
-    
+
     def check_like(self, user):
         return user in self.likes
 
@@ -42,7 +43,10 @@ class User(gj.Document, db.Document):
     email = db.EmailField(required=True, unique=True)
     password = db.StringField(required=True, min_length=6)
 
-    meta = {"collection": "user"}
+    meta = {
+        "collection": "user",
+        "strict": False,
+    }
 
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode("utf8")
@@ -57,4 +61,7 @@ class UserArticle(gj.Document, db.Document):
     article = db.ReferenceField(Article)
     created_at = db.DateTimeField(default=datetime.datetime.utcnow)
 
-    meta = {"collection": "user_article"}
+    meta = {
+        "collection": "user_article",
+        "strict": False,
+    }
