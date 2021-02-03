@@ -26,10 +26,14 @@
         </div>
       </div>
     </div>
+    <div class="more-podcasts">
+      <span v-show="loading==true"><spinner size="35"></spinner></span>
+    </div>
   </div>
 </template>
 
 <script>
+import Spinner from 'vue-simple-spinner'
 import NavBar from '@/components/NavBar'
 import PodcastItem from '@/components/PodcastItem'
 import PodcastPlayer from '@/components/PodcastPlayer'
@@ -42,32 +46,52 @@ export default {
       loading: false,
       articles: [],
       articleId: '',
-      endpoint: '/api/articles'
+      endpoint: '/api/articles',
+      page: -1,
+      per_page: 10
     }
   },
   mounted () {
     this.getArticles()
+    this.scroll()
   },
   methods: {
-    getArticles () {
+    async getArticles () {
       let self = this
-      this.$http
-        .get(this.endpoint)
+      this.loading = true
+      this.page = this.page + 1
+      await this.$http
+        .get(this.endpoint, {params: {page: this.page, per_page: this.per_page}})
         .then(response => {
           let data = response.data
-          self.articles = data.data.articles
+          self.articles = self.articles.concat(data.data.articles)
         })
-        .catch(() => {})
+        .catch(() => {
+        }).finally(() => {
+          self.loading = false
+        })
     },
     updateArticle (e) {
       this.articleId = e
+    },
+    scroll () {
+      let self = this
+      window.onscroll = () => {
+        let bottomOfWindow =
+          document.documentElement.scrollTop + window.innerHeight ===
+          document.documentElement.offsetHeight
+        if (bottomOfWindow) {
+          self.getArticles()
+        }
+      }
     }
   },
   components: {
     NavBar,
     PodcastItem,
     Search,
-    PodcastPlayer
+    PodcastPlayer,
+    Spinner
   }
 }
 </script>
@@ -116,4 +140,17 @@ a {
 .audio-item {
   width: 100%;
 }
+
+.more-podcasts {
+  width: 95%;
+  max-width: 960px;
+  margin: 0 auto 30px auto;
+  display: flex;
+  align-content: flex-start;
+}
+
+.more-podcasts span {
+  margin: 0 auto;
+}
+
 </style>

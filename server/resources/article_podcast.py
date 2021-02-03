@@ -74,8 +74,8 @@ class UserArticles(Resource):
     def get(self):
         user_id = get_jwt_identity()
         user = get_object(User, user_id)
-        page = request.args.get("page", 0)
-        per_page = request.args.get("per_page", 10)
+        page = int(request.args.get("page", 0))
+        per_page = int(request.args.get("per_page", 10))
         articles = [
             {
                 **json.loads(article.to_json()),
