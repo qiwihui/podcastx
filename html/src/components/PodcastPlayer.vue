@@ -1,6 +1,6 @@
 <template>
   <div>
-    <aplayer autoplay :music=podcast v-if="article_info.status==1" />
+    <aplayer autoplay :theme='"#f7fafc"' :music=podcast v-if="article_info.status==1" />
     <span v-if="loading==true"><spinner size="40"></spinner></span>
   </div>
 </template>
@@ -68,7 +68,8 @@ export default {
                 this.podcasts.push({
                   title: this.article_info.title,
                   artist: this.article_info.author,
-                  src: this.article_info.audios[p]
+                  src: this.article_info.audios[p],
+                  pic: this.article_info.image
                 })
               }
               this.podcast = this.podcasts[0]

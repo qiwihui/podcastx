@@ -82,6 +82,7 @@ class UserArticles(Resource):
                 "likes_count": article.likes_count,
                 "content": article.content[:100] if article.content else "",
                 "like": 1 if article.check_like(user) else 0,
+                "audios": [f"/media/{article.id}/full.mp3"] if article.status == 1 else []
             }
             for article in user.articles[page * per_page : (page + 1) * per_page]
         ]

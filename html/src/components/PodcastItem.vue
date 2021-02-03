@@ -121,6 +121,15 @@ export default {
   computed: {
     podcastDescription: function () {
       return this.podcast.content
+    },
+    podcastInfo: function () {
+      return {
+        title: this.podcast.title,
+        artist: this.podcast.author,
+        src: this.podcast.audios[0],
+        pic: this.podcast.image,
+        list: []
+      }
     }
   },
   components: {
@@ -227,13 +236,16 @@ export default {
   line-height: 1rem;
 }
 
+.podcast-player .podcast-player-button {
+  margin-right: 0.75rem;
+}
+
 a {
   color: #1a1a1a;
   text-decoration: underline;
 }
 
 .podcast-player-information {
-  margin-left: 0.75rem;
   color: #78706c;
   font-weight: 500;
   font-size: 0.875rem;
