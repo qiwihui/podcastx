@@ -1,5 +1,5 @@
 <template>
-  <a class="podcast" :href="'/podcasts/' + podcast.id" target="_blank">
+  <div class="podcast" :href="'/podcasts/' + podcast.id" target="_blank">
     <div class="podcast-art">
       <div
         class="podcast-art-image"
@@ -31,14 +31,14 @@
       <div class="podcast-community">
         <div class="action-button like">
           <div class="action-button-content">
-            <img src="../assets/heart.svg" @click="like" v-if="podcast.like===1"/>
+            <img src="../assets/heart.svg" @click="like" v-if="podcast.like===0"/>
             <img src="../assets/red-heart.svg" @click="unlike" v-else />
             <div class="action-button-text">
               <span class="like-count-unliked">{{ podcast.likes_count }}</span>
             </div>
           </div>
         </div>
-        <a
+        <!-- <a
           native="true"
           :href="'/podcasts/' + podcast.id + '/comments'"
           target="_blank"
@@ -55,9 +55,10 @@
             <img src="../assets/share.svg" />
             <div class="action-button-text"></div>
           </div>
-        </div>
-      </div></div
-  ></a>
+        </div> -->
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -77,7 +78,8 @@ export default {
         .then(response => {
           let data = response.data
           if (data.status === 1) {
-            this.pose.likes_count = data.data.likes_count
+            this.podcast.likes_count = data.data.likes_count
+            this.podcast.like = 1
           }
         })
     },
@@ -87,7 +89,8 @@ export default {
         .then(response => {
           let data = response.data
           if (data.status === 1) {
-            this.pose.likes_count = data.data.likes_count
+            this.podcast.likes_count = data.data.likes_count
+            this.podcast.like = 1
           }
         })
     }
@@ -102,7 +105,7 @@ export default {
 
 <style scoped>
 .podcast {
-  padding: 1.75rem 0;
+  padding: 1.75rem 1.25rem 0;
   line-height: 130%;
   cursor: pointer;
   text-decoration: none;
@@ -117,6 +120,15 @@ export default {
   border: 1px solid transparent;
   border-left: 0;
   border-right: 0;
+}
+
+.podcast:hover {
+  background-color: #f7f5f3;
+  transition: background-color 0.4s;
+  border: 1px solid #e5e5e5;
+  border-left: 0;
+  border-right: 0;
+  margin: -1px 0 0;
 }
 
 .podcast-art {
