@@ -4,6 +4,7 @@
       <nav-bar></nav-bar>
     </header>
     <h2 class="podcast-list">播客列表</h2>
+    <search-item @bottonClicked="getFilterredArticles"></search-item>
     <div class="podcast-cat">
       <div class="audio-list">
         <div class="audio-item">
@@ -27,6 +28,7 @@
 import Spinner from 'vue-simple-spinner'
 import NavBar from '@/components/NavBar'
 import PodcastItem from '@/components/PodcastItem'
+import SearchItem from '@/components/SearchItem'
 export default {
   name: 'Explore',
   data () {
@@ -35,7 +37,8 @@ export default {
       articles: [],
       endpoint: '/api/explore/articles',
       page: -1,
-      per_page: 10
+      per_page: 10,
+      filterText: ''
     }
   },
   mounted () {
@@ -43,12 +46,25 @@ export default {
     this.scroll()
   },
   methods: {
+    async getFilterredArticles (e) {
+      this.page = -1
+      this.articles = []
+      this.filterText = e
+      await this.getArticles()
+    },
     async getArticles () {
       let self = this
       this.loading = true
       this.page = this.page + 1
+      let params = {
+        page: this.page,
+        per_page: this.per_page
+      }
+      if (this.filterText !== '') {
+        params.search = this.filterText
+      }
       await this.$http
-        .get(this.endpoint, {params: {page: this.page, per_page: this.per_page}})
+        .get(this.endpoint, {params: params})
         .then(response => {
           let data = response.data
           self.articles = self.articles.concat(data.data.articles)
@@ -73,7 +89,8 @@ export default {
   components: {
     NavBar,
     Spinner,
-    PodcastItem
+    PodcastItem,
+    SearchItem
   }
 }
 </script>

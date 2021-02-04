@@ -42,3 +42,10 @@ class ArticleActionSchema(ma.Schema):
     action = fields.String(
         required=True, validate=validate.OneOf(["like", "unlike", "add"]), error_messages=error_messages("操作")
     )
+
+
+class ArticleSearchSchema(ma.Schema):
+
+    page = fields.Integer(required=False, default=0, error_messages=error_messages("请求参数"))
+    per_page = fields.Integer(required=False, default=10, error_messages=error_messages("请求参数"))
+    search = fields.String(required=False, error_messages=error_messages("过滤内容"))
