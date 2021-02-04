@@ -32,10 +32,10 @@ class Article(gj.Document, db.Document):
     }
 
     @property
-    def likes_count(self):
+    def likes_count(self) -> int:
         return len(self.likes) if self.likes else 0
 
-    def check_like(self, user):
+    def check_like(self, user) -> bool:
         return user and user in self.likes
 
     def json(self, user=None):
@@ -46,10 +46,16 @@ class Article(gj.Document, db.Document):
             "content": self.content[:100] if self.content else "",
             "like": 1 if user and self.check_like(user) else 0,
             "audios": [f"/media/{self.id}/full.mp3"] if self.status == 1 else [],
-            "added": 1 if user else 0,
+            # check if user already added article
+            "added": 1 if user and self.check_added(user) else 0,
         }
 
         return data
+    
+    def check_added(self, user) -> bool:
+
+        ua = UserArticle.objects.find(user=user, article=self)
+        return 1 if ua else 0
 
 
 class User(gj.Document, db.Document):
