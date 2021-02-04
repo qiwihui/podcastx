@@ -36,7 +36,7 @@
           <div class="success mb-2" v-show="successMessage!==''">{{ successMessage }}</div>
           <div>
             <button type="submit">
-              <span v-if="loading == false">登录</span>
+              <span v-if="loading == false" class="action">登录</span>
               <span v-else>
                 <spinner size="15"></spinner>
               </span>
@@ -118,6 +118,11 @@ input, button {
   border-style: solid;
   border-color: rgb(226, 232, 240);
   border-image: initial;
+}
+
+button span {
+  font-weight: 500;
+  font-size: 1rem;
 }
 
 .login-container {

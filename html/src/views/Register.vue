@@ -139,6 +139,11 @@ button {
   border-image: initial;
 }
 
+button span {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
 .login-container {
   width: 100%;
   margin: 0 auto;
