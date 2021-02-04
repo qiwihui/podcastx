@@ -2,7 +2,7 @@ import json
 import logging
 import marshmallow
 from flask_restful import Resource, request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, jwt_optional
 from database.models import Article as ArticleDoc, User, UserArticle as UserArticleDoc
 from database.utils import create_article, update_article, user_add_article, user_delete_article
 from resources.schema import ArticleUrlSchema, ArticleActionSchema
@@ -90,7 +90,7 @@ class UserArticles(Resource):
             "data": {"articles": articles},
         }, 200
 
-    @jwt_required
+    @jwt_optional
     def post(self):
         data = request.get_json()
         schema = ArticleUrlSchema()
@@ -115,26 +115,6 @@ class UserArticles(Resource):
             "status": 1,
             "msg": "ok",
             "data": {"id": str(article.id)},
-        }, 200
-
-
-class Articles(Resource):
-    def post(self):
-        data = request.get_json()
-        schema = ArticleUrlSchema()
-        try:
-            validated_data = schema.load(data)
-        except marshmallow.exceptions.ValidationError as error:
-            resp = {"status": 0, "msg": "error", "errors": error.messages}
-            return resp, 500
-        url = validated_data.get("url")
-        ap = create_article({"url": url})
-        if ap.status == 0:
-            task_fetch_url.delay(str(ap.id))
-        return {
-            "status": 1,
-            "msg": "ok",
-            "data": {"id": str(ap.id)},
         }, 200
 
 

@@ -4,7 +4,7 @@
       <nav-bar></nav-bar>
     </header>
     <!-- <h2 class="podcast-list">添加</h2> -->
-    <search-article class="search-container mb-4" :endpoint='endpoint' @articleChanged="updateArticle"></search-article>
+    <search-article class="search-container mb-4" @articleChanged="updateArticle"></search-article>
     <section class="audio-player mb-4">
       <podcast-player
         autoplay

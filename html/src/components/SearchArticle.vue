@@ -17,7 +17,7 @@ export default {
   props: {
     endpoint: {
       type: String,
-      default: '/api/example_articles'
+      default: '/api/articles'
     }
   },
   data () {
