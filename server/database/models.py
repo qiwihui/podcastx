@@ -54,7 +54,7 @@ class Article(gj.Document, db.Document):
     
     def check_added(self, user) -> bool:
 
-        ua = UserArticle.objects.find(user=user, article=self)
+        ua = UserArticle.objects(user=user, article=self)
         return 1 if ua else 0
 
 
