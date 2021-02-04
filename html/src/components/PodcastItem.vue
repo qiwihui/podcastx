@@ -10,7 +10,8 @@
       <div class="podcast-title-title">
         {{ podcast.title }}
       </div>
-      <div class="podcast-title-subtitle">{{ podcast.author }}</div>
+      <div class="podcast-title-subtitle" v-if="podcast.author!=''">{{ podcast.author }}</div>
+      <div class="podcast-title-subtitle">&nbsp;</div>
     </div>
     <div class="podcast-description">
       {{ podcastDescription }}
@@ -198,6 +199,27 @@ export default {
   border-right: 0;
 }
 
+@media screen and (max-width: 900px) {
+  .podcast {
+      grid-template-columns: 5.5rem auto;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .podcast {
+      padding: 1.25rem;
+      border-bottom: 1px solid #e5e5e5;
+      display: grid;
+      grid-template-columns: 4.5rem auto;
+      grid-template-rows: 1fr auto auto auto;
+      gap: 0 1rem;
+      grid-template-areas:
+          'art title'
+          'description description'
+          'player player';
+  }
+}
+
 .podcast:hover {
   background-color: #f7f5f3;
   transition: background-color 0.4s;
@@ -224,6 +246,20 @@ export default {
   background-size: cover;
 }
 
+@media screen and (max-width: 900px) {
+  .podcast-art-image, .podcast-art-placeholder {
+      width: 5.5rem;
+      height: 5.5rem;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .podcast-art-image, .podcast-art-placeholder {
+      width: 3.5rem;
+      height: 3.5rem;
+  }
+}
+
 .podcast-title {
   grid-area: title;
 }
@@ -232,18 +268,18 @@ export default {
   font-size: 1.125rem;
   font-weight: bold;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+}
+
+@media screen and (max-width: 540px) {
+  .podcast-title-title {
+    min-height: 2rem;
+  }
 }
 
 .podcast-title-subtitle {
   font-size: 0.875rem;
   font-weight: 500;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  overflow: inline-block;
 }
 
 .podcast-description {
@@ -268,6 +304,13 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+@media screen and (max-width: 540px) {
+.podcast-actions {
+    border-bottom: none;
+    padding-bottom: 0.25rem;
+}
 }
 
 .podcast-player {
