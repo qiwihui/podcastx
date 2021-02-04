@@ -56,7 +56,7 @@
             <div class="action-button-text"></div>
           </div>
         </div> -->
-        <div class="action-button share">
+        <div class="action-button share" v-if="showDelete">
           <div class="action-button-content">
             <img src="../assets/trash.svg" @click="delPodcast" v-if="deleteLoading==false"/>
             <span v-else><spinner size="18"></spinner></span>
@@ -73,7 +73,8 @@ import Heart from '@/components/icons/Heart'
 export default {
   name: 'PodcastItem',
   props: {
-    podcast: Object
+    podcast: Object,
+    showDelete: true
   },
   data () {
     return {

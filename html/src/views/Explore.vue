@@ -11,6 +11,7 @@
             v-for="article in articles"
             :key="article.id"
             :podcast="article"
+            :show-delete="false"
           ></podcast-item>
         </div>
       </div>
@@ -83,5 +84,35 @@ export default {
   margin-right: auto;
   margin-bottom: 50px;
   padding: 0 15px;
+}
+
+.podcast-list {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.audio-list {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto 30px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.audio-item {
+  width: 100%;
+}
+
+.more-podcasts {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto 30px auto;
+  display: flex;
+  align-content: flex-start;
+}
+
+.more-podcasts span {
+  margin: 0 auto;
 }
 </style>
