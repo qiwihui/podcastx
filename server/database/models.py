@@ -1,4 +1,6 @@
+import json
 import datetime
+from dateutil import parser
 from app import db
 from flask_bcrypt import generate_password_hash, check_password_hash
 import mongoengine_goodjson as gj
@@ -34,7 +36,19 @@ class Article(gj.Document, db.Document):
         return len(self.likes) if self.likes else 0
 
     def check_like(self, user):
-        return user in self.likes
+        return user and user in self.likes
+
+    def json(self, user=None):
+
+        data = {
+            **json.loads(self.to_json()),
+            "likes_count": self.likes_count,
+            "content": self.content[:100] if self.content else "",
+            "like": 1 if user and self.check_like(user) else 0,
+            "audios": [f"/media/{self.id}/full.mp3"] if self.status == 1 else [],
+        }
+
+        return data
 
 
 class User(gj.Document, db.Document):

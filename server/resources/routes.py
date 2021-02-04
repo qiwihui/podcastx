@@ -1,5 +1,6 @@
 from resources.article_podcast import Article, ArticleAudios, Articles, UserArticles
 from resources.auth import Register, Login, RefreshToken
+from resources.explore import ExploreArticles
 
 
 def initialize_routes(api):
@@ -8,7 +9,8 @@ def initialize_routes(api):
     api.add_resource(ArticleAudios, "/api/articles/<article_id>/audios")
     api.add_resource(Articles, "/api/example_articles")
     api.add_resource(UserArticles, "/api/articles")
-
+    # explore
+    api.add_resource(ExploreArticles, "/api/explore/articles")
     # auth
     api.add_resource(Register, "/api/register")
     api.add_resource(Login, "/api/login")

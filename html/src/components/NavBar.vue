@@ -1,7 +1,10 @@
 <template>
   <nav>
     <div class="container">
-      <a class="nav-title" href="/">PodcastX</a>
+      <span class="nav-title">
+        <ul><a class="brand" href="/">PodcastX</a></ul>
+        <ul><span class="nav-explore"><router-link :to="{name: 'Explore'}" exact>探索</router-link></span></ul>
+      </span>
       <div class="nav-items" v-show="displayitems">
         <ul v-if="isLoggedIn">
           <span><a href="/podcasts">{{ username }}</a></span>
@@ -64,9 +67,18 @@ nav .container {
 }
 
 .nav-title {
-  font-size: 30px;
-  /* margin: 20px 0 10px; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+
+.nav-title .brand {
+  font-size: 30px;
+}
+
+/* .nav-title .nav-explore {
+
+} */
 
 a {
   cursor: pointer;

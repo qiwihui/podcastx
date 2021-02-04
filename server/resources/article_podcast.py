@@ -17,10 +17,7 @@ class Article(Resource):
     def get(self, article_id):
         article = get_object(ArticleDoc, article_id)
         if article:
-            data = json.loads(article.to_json())
-            data["likes_count"] = article.likes_count
-            data["content"] = data["content"][:100] if data["content"] else ""
-            data["audios"] = [f"/media/{article.id}/full.mp3"] if article.status == 1 else []
+            data = article.json()
         else:
             data = {}
 
@@ -82,13 +79,7 @@ class UserArticles(Resource):
         
         user_articles = UserArticleDoc.objects(user=user).order_by('-created_at')
         articles = [
-            {
-                **json.loads(ua.article.to_json()),
-                "likes_count": ua.article.likes_count,
-                "content": ua.article.content[:100] if ua.article.content else "",
-                "like": 1 if ua.article.check_like(user) else 0,
-                "audios": [f"/media/{ua.article.id}/full.mp3"] if ua.article.status == 1 else []
-            }
+            ua.json(user)
             for ua in user_articles[page * per_page : (page + 1) * per_page]
         ]
         return {
