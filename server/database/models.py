@@ -39,7 +39,6 @@ class Article(gj.Document, db.Document):
         return user and user in self.likes
 
     def json(self, user=None):
-
         data = {
             **json.loads(self.to_json()),
             "likes_count": self.likes_count,
@@ -53,9 +52,8 @@ class Article(gj.Document, db.Document):
         return data
     
     def check_added(self, user) -> bool:
-
         ua = UserArticle.objects(user=user, article=self)
-        return 1 if ua else 0
+        return True if ua else False
 
 
 class User(gj.Document, db.Document):

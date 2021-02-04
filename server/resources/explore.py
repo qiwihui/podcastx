@@ -2,7 +2,7 @@ import json
 import logging
 import marshmallow
 from flask_restful import Resource, request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, jwt_optional
 from mongoengine.queryset import Q
 from database.models import Article as ArticleDoc, User
 from resources.utils import get_object
@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 class ExploreArticles(Resource):
 
+    @jwt_optional
     def get(self):
         user_id = get_jwt_identity()
         user = None
