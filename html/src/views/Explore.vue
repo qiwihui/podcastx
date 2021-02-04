@@ -17,7 +17,8 @@
       </div>
     </div>
     <div class="more-podcasts">
-      <span v-show="loading==true"><spinner size="35"></spinner></span>
+      <span v-if="loading==true"><spinner size="35"></spinner></span>
+      <span v-else @click="getArticles">加载更多</span>
     </div>
   </div>
 </template>

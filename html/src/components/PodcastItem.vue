@@ -74,7 +74,10 @@ export default {
   name: 'PodcastItem',
   props: {
     podcast: Object,
-    showDelete: true
+    showDelete: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -83,6 +86,10 @@ export default {
   },
   methods: {
     async doLike () {
+      if (!this.isLoggedIn) {
+        this.$router.push({name: 'Login'})
+        return
+      }
       await this.$http
         .post('/api/articles/' + this.podcast.id, { action: 'like' })
         .then(response => {
@@ -94,6 +101,10 @@ export default {
         })
     },
     async doUnlike () {
+      if (!this.isLoggedIn) {
+        this.$router.push({name: 'Login'})
+        return
+      }
       await this.$http
         .post('/api/articles/' + this.podcast.id, { action: 'unlike' })
         .then(response => {
@@ -131,7 +142,8 @@ export default {
         pic: this.podcast.image,
         list: []
       }
-    }
+    },
+    isLoggedIn: function () { return this.$store.getters.isAuthenticated }
   },
   components: {
     Heart,
