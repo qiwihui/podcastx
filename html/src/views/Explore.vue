@@ -4,7 +4,7 @@
       <nav-bar></nav-bar>
     </header>
     <h2 class="podcast-list">播客列表</h2>
-    <search-item @bottonClicked="getFilterredArticles"></search-item>
+    <search @bottonClicked="getFilterredArticles"></search>
     <div class="podcast-cat">
       <div class="audio-list">
         <div class="audio-item">
@@ -28,7 +28,7 @@
 import Spinner from 'vue-simple-spinner'
 import NavBar from '@/components/NavBar'
 import PodcastItem from '@/components/PodcastItem'
-import SearchItem from '@/components/SearchItem'
+import Search from '@/components/Search'
 export default {
   name: 'Explore',
   data () {
@@ -90,7 +90,7 @@ export default {
     NavBar,
     Spinner,
     PodcastItem,
-    SearchItem
+    Search
   }
 }
 </script>

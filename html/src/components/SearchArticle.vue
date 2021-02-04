@@ -1,27 +1,18 @@
 <template>
   <div>
-    <div class="input">
-      <input
-        v-model="searchUrl"
-        type="text"
-        placeholder="输入文章链接"
-        class="url-input"
-      />
-      <span class="search" @click="extractUrl">
-        <span v-if="loading == false">生成语音</span>
-        <span v-else>
-          <spinner size="15"></spinner>
-        </span>
-      </span>
-    </div>
-    <div class="input-message" v-if="error_message != ''">
-      <span>{{ error_message }}</span>
-    </div>
+    <search
+      :search-placeholder='"输入文章链接"'
+      :botton-text='"生成语音"'
+      :error-message="error_message"
+      :loading="loading"
+      @bottonClicked="extractUrl"
+    ></search>
   </div>
 </template>
 
 <script>
 import Spinner from 'vue-simple-spinner'
+import Search from '@/components/Search'
 export default {
   props: {
     endpoint: {
@@ -33,16 +24,15 @@ export default {
     return {
       loading: false,
       error_message: '',
-      articleId: '',
-      searchUrl: ''
+      articleId: ''
     }
   },
   methods: {
-    async extractUrl () {
+    async extractUrl (e) {
       this.loading = true
       this.error_message = ''
       this.articleId = ''
-      let urlData = { url: this.searchUrl }
+      let urlData = { url: e }
       await this.$http
         .post(this.endpoint, urlData)
         .then(response => response.data)
@@ -67,61 +57,11 @@ export default {
     }
   },
   components: {
-    Spinner
+    Spinner,
+    Search
   }
 }
 </script>
 
 <style scoped>
-.input {
-  width: 100%;
-  max-width: 960px;
-  text-align: center;
-  display: flex;
-  margin: 0 auto 10px auto;
-}
-
-input {
-  flex: 5;
-  padding-left: 8px;
-  /* height: 40px; */
-  line-height: 40px;
-  outline: 0;
-  color: #000;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border-radius: 8px 0 0 8px;
-  box-shadow: none;
-  border: 2px solid #42b983;
-}
-
-input[type="text"] {
-  font-size: 18px;
-}
-
-.input-message {
-  padding-left: 10px;
-  color: red;
-}
-
-.search {
-  flex: 1;
-  min-width: 70px;
-  background-color: #42b983;
-  /* height: 40px; */
-  line-height: 40px;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border-radius: 0 8px 8px 0;
-  box-shadow: none;
-  border: 2px solid #42b983;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 </style>

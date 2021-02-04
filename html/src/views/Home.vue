@@ -10,7 +10,7 @@
         <p>您可以随时随地收听，无论是下班路上，还是工作间隙。</p>
       </article>
       <section class="search-container">
-        <search @articleChanged="updateArticle"></search>
+        <search-article @articleChanged="updateArticle"></search-article>
       </section>
       <section class="audio-player">
         <podcast-player
@@ -42,7 +42,7 @@ import NavBar from '@/components/NavBar'
 import FooterNote from '@/components/FooterNote'
 import PodcastPlayer from '@/components/PodcastPlayer'
 import FeatureCard from '@/components/FeatureCard'
-import Search from '@/components/Search'
+import SearchArticle from '@/components/SearchArticle'
 export default {
   name: 'Home',
   data () {
@@ -84,7 +84,7 @@ export default {
     FooterNote,
     PodcastPlayer,
     FeatureCard,
-    Search
+    SearchArticle
   }
 }
 </script>

@@ -2,20 +2,20 @@
   <div>
     <div class="input">
       <input
-        v-model="searchUrl"
+        v-model="searchValue"
         type="text"
-        placeholder="输入文章链接"
+        :placeholder="searchPlaceholder"
         class="url-input"
       />
-      <span class="search" @click="extractUrl">
-        <span v-if="loading == false">生成语音</span>
+      <span class="search" @click="bottonClick">
+        <span v-if="loading == false">{{ bottonText }}</span>
         <span v-else>
           <spinner size="15"></spinner>
         </span>
       </span>
     </div>
-    <div class="input-message" v-if="error_message != ''">
-      <span>{{ error_message }}</span>
+    <div class="input-message" v-if="errorMessage != ''">
+      <span>{{ errorMessage }}</span>
     </div>
   </div>
 </template>
@@ -23,47 +23,33 @@
 <script>
 import Spinner from 'vue-simple-spinner'
 export default {
+  name: 'Search',
   props: {
-    endpoint: {
+    searchPlaceholder: {
       type: String,
-      default: '/api/example_articles'
+      default: '请输入搜索内容'
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    errorMessage: {
+      type: String,
+      default: ''
+    },
+    bottonText: {
+      type: String,
+      default: '搜索'
     }
   },
   data () {
     return {
-      loading: false,
-      error_message: '',
-      articleId: '',
-      searchUrl: ''
+      searchValue: ''
     }
   },
   methods: {
-    async extractUrl () {
-      this.loading = true
-      this.error_message = ''
-      this.articleId = ''
-      let urlData = { url: this.searchUrl }
-      await this.$http
-        .post(this.endpoint, urlData)
-        .then(response => response.data)
-        .then(data => {
-          if (data.status === 1) {
-            this.articleId = data.data.id
-            // articleId changed
-            this.$emit('articleChanged', this.articleId)
-          } else {
-            this.error_message = '解析错误，请重试'
-          }
-          this.loading = false
-        })
-        .catch(error => {
-          this.error_message = '请求错误，请稍后重试'
-          this.loading = false
-          console.error(error)
-        })
-        .finally(() => {
-          this.loading = false
-        })
+    bottonClick () {
+      this.$emit('bottonClicked', this.searchValue)
     }
   },
   components: {

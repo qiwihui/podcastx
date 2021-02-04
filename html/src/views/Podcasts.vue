@@ -4,7 +4,7 @@
       <nav-bar></nav-bar>
     </header>
     <!-- <h2 class="podcast-list">添加</h2> -->
-    <search class="search-container mb-4" :endpoint='endpoint' @articleChanged="updateArticle"></search>
+    <search-article class="search-container mb-4" :endpoint='endpoint' @articleChanged="updateArticle"></search-article>
     <section class="audio-player mb-4">
       <podcast-player
         autoplay
@@ -38,7 +38,7 @@ import Spinner from 'vue-simple-spinner'
 import NavBar from '@/components/NavBar'
 import PodcastItem from '@/components/PodcastItem'
 import PodcastPlayer from '@/components/PodcastPlayer'
-import Search from '@/components/Search'
+import SearchArticle from '@/components/SearchArticle'
 export default {
   name: 'Podcasts',
   data () {
@@ -90,7 +90,7 @@ export default {
   components: {
     NavBar,
     PodcastItem,
-    Search,
+    SearchArticle,
     PodcastPlayer,
     Spinner
   }
