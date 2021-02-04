@@ -6,14 +6,14 @@
         <span class="nav-explore"><router-link :to="{name: 'Explore'}" exact>探索</router-link></span>
       </span>
       <div class="nav-items" v-show="displayitems">
-        <ul v-if="isLoggedIn">
+        <span v-if="isLoggedIn">
           <span><a href="/podcasts">{{ username }}</a></span>
-        </ul>
-        <ul v-if="isLoggedIn">
+        </span>
+        <span v-if="isLoggedIn">
           <a @click="logout">登出</a>
-        </ul>
-        <ul v-if="!isLoggedIn"><router-link :to="{name: 'Login'}" exact>登录</router-link></ul>
-        <ul v-if="!isLoggedIn"><router-link :to="{name: 'Register'}" exact>注册</router-link></ul>
+        </span>
+        <span v-if="!isLoggedIn"><router-link :to="{name: 'Login'}" exact>登录</router-link></span>
+        <span v-if="!isLoggedIn"><router-link :to="{name: 'Register'}" exact>注册</router-link></span>
       </div>
     </div>
   </nav>
@@ -97,6 +97,10 @@ a:visited {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.nav-items span {
+  padding-left: 1.5rem;
 }
 
 </style>
