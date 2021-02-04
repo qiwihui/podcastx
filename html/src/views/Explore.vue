@@ -32,7 +32,7 @@ export default {
       loading: false,
       articles: [],
       endpoint: '/api/explore/articles',
-      page: 0,
+      page: -1,
       per_page: 10
     }
   },

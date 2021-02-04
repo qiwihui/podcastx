@@ -79,7 +79,7 @@ class UserArticles(Resource):
         
         user_articles = UserArticleDoc.objects(user=user).order_by('-created_at')
         articles = [
-            ua.json(user)
+            ua.article.json(user)
             for ua in user_articles[page * per_page : (page + 1) * per_page]
         ]
         return {

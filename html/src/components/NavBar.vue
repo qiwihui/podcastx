@@ -2,7 +2,7 @@
   <nav>
     <div class="container">
       <span class="nav-title">
-        <ul><a class="brand" href="/">PodcastX</a></ul>
+        <a class="brand" href="/">PodcastX</a>
         <ul><span class="nav-explore"><router-link :to="{name: 'Explore'}" exact>探索</router-link></span></ul>
       </span>
       <div class="nav-items" v-show="displayitems">
