@@ -3,7 +3,7 @@
     <div class="container">
       <span class="nav-title">
         <a class="brand" href="/">PodcastX</a>
-        <ul><span class="nav-explore"><router-link :to="{name: 'Explore'}" exact>探索</router-link></span></ul>
+        <span class="nav-explore"><router-link :to="{name: 'Explore'}" exact>探索</router-link></span>
       </span>
       <div class="nav-items" v-show="displayitems">
         <ul v-if="isLoggedIn">
@@ -74,11 +74,8 @@ nav .container {
 
 .nav-title .brand {
   font-size: 30px;
+  margin-right: 30px;
 }
-
-/* .nav-title .nav-explore {
-
-} */
 
 a {
   cursor: pointer;
