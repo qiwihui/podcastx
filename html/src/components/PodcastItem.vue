@@ -56,10 +56,16 @@
             <div class="action-button-text"></div>
           </div>
         </div> -->
-        <div class="action-button share" v-if="showDelete">
+        <div class="action-button share" v-if="podcast.added">
           <div class="action-button-content">
-            <img src="../assets/trash.svg" @click="delPodcast" v-if="deleteLoading==false"/>
-            <span v-else><spinner size="18"></spinner></span>
+            <img src="../assets/trash.svg" @click="doDelete" v-if="deleteLoading==false"/>
+            <span v-else><spinner size="14"></spinner></span>
+          </div>
+        </div>
+        <div class="action-button share" v-else>
+          <div class="action-button-content">
+            <img src="../assets/plus.svg" @click="doAdd" v-if="deleteLoading==false"/>
+            <span v-else><spinner size="14"></spinner></span>
           </div>
         </div>
       </div>
@@ -85,6 +91,23 @@ export default {
     }
   },
   methods: {
+    async doAdd () {
+      this.deleteLoading = true
+      if (!this.isLoggedIn) {
+        this.$router.push({name: 'Login'})
+        return
+      }
+      await this.$http
+        .post('/api/articles/' + this.podcast.id, { action: 'add' })
+        .then(response => {
+          let data = response.data
+          if (data.status === 1) {
+            this.podcast.added = 1
+          }
+        }).finally(() => {
+          this.deleteLoading = false
+        })
+    },
     async doLike () {
       if (!this.isLoggedIn) {
         this.$router.push({name: 'Login'})
@@ -115,15 +138,19 @@ export default {
           }
         })
     },
-    async delPodcast () {
+    async doDelete () {
       this.deleteLoading = true
       await this.$http
         .delete('/api/articles/' + this.podcast.id)
         .then(response => {
           let data = response.data
           if (data.status === 1) {
-            this.$destroy()
-            this.$el.parentNode.removeChild(this.$el)
+            if (!this.showDelete) {
+              this.podcast.added = 0
+            } else {
+              this.$destroy()
+              this.$el.parentNode.removeChild(this.$el)
+            }
           }
         }).finally(() => {
           this.deleteLoading = false

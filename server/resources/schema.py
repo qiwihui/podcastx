@@ -40,5 +40,5 @@ class LoginSchema(ma.Schema):
 class ArticleActionSchema(ma.Schema):
 
     action = fields.String(
-        required=True, validate=validate.OneOf(["like", "unlike"]), error_messages=error_messages("操作")
+        required=True, validate=validate.OneOf(["like", "unlike", "add"]), error_messages=error_messages("操作")
     )

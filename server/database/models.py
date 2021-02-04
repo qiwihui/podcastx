@@ -46,6 +46,7 @@ class Article(gj.Document, db.Document):
             "content": self.content[:100] if self.content else "",
             "like": 1 if user and self.check_like(user) else 0,
             "audios": [f"/media/{self.id}/full.mp3"] if self.status == 1 else [],
+            "added": 1 if user else 0,
         }
 
         return data

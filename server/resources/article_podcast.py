@@ -48,6 +48,8 @@ class Article(Resource):
                 article.update(pull__likes=user)
             elif action == "like":
                 article.update(add_to_set__likes=[user])
+            elif action == "add":
+                user_add_article(user, article)
             article = get_object(ArticleDoc, article_id)
             result = {"status": 1, "msg": "ok", "data": {"likes_count": len(article.likes)}}
             return result, 200
