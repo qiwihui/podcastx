@@ -6,9 +6,12 @@ axios.defaults.withCredentials = true
 // axios.defaults.baseURL = 'https://podcastx.qiwihui.com/'
 
 axios.interceptors.request.use(config => {
-  config.headers = {
-    ...config.headers,
-    Authorization: `Bearer ${store.getters.stateAccessToken}`
+  let accessToken = store.getters.stateAccessToken
+  if (accessToken) {
+    config.headers = {
+      ...config.headers,
+      Authorization: `Bearer ${accessToken}`
+    }
   }
   return config
 })
