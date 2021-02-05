@@ -17,64 +17,76 @@
       {{ podcastDescription }}
     </div>
     <div class="podcast-actions">
-      <div class="podcast-player">
-        <a
-          class="podcast-player-button"
-          :href="'/podcasts/' + podcast.id + '#play'"
-          target="_blank"
-        >
-          <img src="../assets/player.svg" />
-        </a>
-        <div class="podcast-player-information">
-          <span>{{ podcast.created_at | formatDate }}</span>
+      <div class="podcast-toolbox">
+        <div class="podcast-player">
+          <div
+            class="podcast-player-button"
+            @click="isSelected=!isSelected"
+          >
+            <img src="../assets/player.svg" />
+          </div>
+          <div class="podcast-player-information">
+            <span>{{ podcast.created_at | formatDate }}</span>
+          </div>
+        </div>
+        <div class="podcast-community">
+          <div class="action-button like">
+            <div class="action-button-content">
+              <heart :fill='"#fd6752"' :stroke='"#fd6752"' @click.native="doUnlike" v-if="podcast.like==1"></heart>
+              <heart :fill='"none"' :stroke='"#000"' @click.native="doLike" v-else></heart>
+              <div class="action-button-text">
+                <span class="like-count-unliked">{{ podcast.likes_count }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- <a
+            native="true"
+            :href="'/podcasts/' + podcast.id + '/comments'"
+            target="_blank"
+          >
+            <div class="action-button action-button-comment none">
+              <div class="action-button-content">
+                <img src="../assets/comment.svg" />
+                <div class="action-button-text">评论</div>
+              </div>
+            </div>
+          </a>
+          <div class="action-button share">
+            <div class="action-button-content">
+              <img src="../assets/share.svg" />
+              <div class="action-button-text"></div>
+            </div>
+          </div> -->
+          <div class="action-button share" v-if="podcast.added">
+            <div class="action-button-content">
+              <img src="../assets/trash.svg" @click="doDelete" v-if="deleteLoading==false"/>
+              <span v-else><spinner size="14"></spinner></span>
+            </div>
+          </div>
+          <div class="action-button share" v-else>
+            <div class="action-button-content">
+              <img src="../assets/plus.svg" @click="doAdd" v-if="deleteLoading==false"/>
+              <span v-else><spinner size="14"></spinner></span>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="podcast-community">
-        <div class="action-button like">
-          <div class="action-button-content">
-            <heart :fill='"#fd6752"' :stroke='"#fd6752"' @click.native="doUnlike" v-if="podcast.like==1"></heart>
-            <heart :fill='"none"' :stroke='"#000"' @click.native="doLike" v-else></heart>
-            <div class="action-button-text">
-              <span class="like-count-unliked">{{ podcast.likes_count }}</span>
-            </div>
-          </div>
-        </div>
-        <!-- <a
-          native="true"
-          :href="'/podcasts/' + podcast.id + '/comments'"
-          target="_blank"
-        >
-          <div class="action-button action-button-comment none">
-            <div class="action-button-content">
-              <img src="../assets/comment.svg" />
-              <div class="action-button-text">评论</div>
-            </div>
-          </div>
-        </a>
-        <div class="action-button share">
-          <div class="action-button-content">
-            <img src="../assets/share.svg" />
-            <div class="action-button-text"></div>
-          </div>
-        </div> -->
-        <div class="action-button share" v-if="podcast.added">
-          <div class="action-button-content">
-            <img src="../assets/trash.svg" @click="doDelete" v-if="deleteLoading==false"/>
-            <span v-else><spinner size="14"></spinner></span>
-          </div>
-        </div>
-        <div class="action-button share" v-else>
-          <div class="action-button-content">
-            <img src="../assets/plus.svg" @click="doAdd" v-if="deleteLoading==false"/>
-            <span v-else><spinner size="14"></spinner></span>
-          </div>
-        </div>
+      <div class="podcast-mini-player" v-show="isSelected">
+        <audio-player
+          :height="'40px'"
+          ref="vPlay"
+          :autoplay="false"
+          :forceLive="false"
+          preload="false"
+          :source="selected"
+        ></audio-player>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import AudioPlayer from '@/components/AudioPlayer'
 import Spinner from 'vue-simple-spinner'
 import Heart from '@/components/icons/Heart'
 export default {
@@ -88,7 +100,9 @@ export default {
   },
   data () {
     return {
-      deleteLoading: false
+      deleteLoading: false,
+      selected: 'https://podcastx.qiwihui.com/media/601226b5e83cd5e6edf3417e/full.mp3',
+      isSelected: false
     }
   },
   methods: {
@@ -175,7 +189,8 @@ export default {
   },
   components: {
     Heart,
-    Spinner
+    Spinner,
+    AudioPlayer
   }
 }
 </script>
@@ -188,11 +203,12 @@ export default {
   text-decoration: none;
   display: grid;
   grid-template-columns: 7rem auto;
-  grid-template-rows: 1fr auto auto;
+  grid-template-rows: 1fr auto auto auto;
   gap: 0 1.5rem;
   grid-template-areas:
     "art title"
     "art description"
+    "art player"
     "art player";
   border: 1px solid transparent;
   border-left: 0;
@@ -216,6 +232,7 @@ export default {
       grid-template-areas:
           'art title'
           'description description'
+          'player player'
           'player player';
   }
 }
@@ -299,18 +316,27 @@ export default {
   grid-area: player;
   border-bottom: 1px solid #e5e5e5;
   margin-top: 0.75rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
 }
 
 @media screen and (max-width: 540px) {
-.podcast-actions {
-    border-bottom: none;
-    padding-bottom: 0.25rem;
+  .podcast-actions {
+      border-bottom: none;
+      padding-bottom: 0.25rem;
+  }
 }
+
+.podcast-toolbox {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .podcast-player {
@@ -341,6 +367,12 @@ a {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.podcast-mini-player {
+  padding-top: 0.75rem;
+  width: 100%;
+  display: inline-block;
 }
 
 .action-button {

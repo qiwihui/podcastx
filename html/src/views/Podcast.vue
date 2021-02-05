@@ -4,7 +4,7 @@
       <nav-bar></nav-bar>
     </header>
     <div class="audio-player">
-      <podcast-player :articleId="articleId"></podcast-player>
+      <audio-player :articleId="articleId" ref="vPlay" :autoplay="true" :forceLive="true" preload="true" :source="selected"></audio-player>
     </div>
   </div>
 </template>
@@ -12,10 +12,12 @@
 <script>
 import NavBar from '@/components/NavBar'
 import PodcastPlayer from '@/components/PodcastPlayer'
+import AudioPlayer from '@/components/AudioPlayer'
 export default {
   name: 'Podcast',
   data () {
     return {
+      selected: 'https://podcastx.qiwihui.com/media/601226b5e83cd5e6edf3417e/full.mp3',
       error_message: '',
       loading: false,
       articleId: this.$route.params.podcastId
@@ -27,7 +29,8 @@ export default {
   },
   components: {
     NavBar,
-    PodcastPlayer
+    PodcastPlayer,
+    AudioPlayer
   }
 }
 </script>
