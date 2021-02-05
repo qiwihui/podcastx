@@ -22,7 +22,7 @@
 } */
 
 .mejs__container .mejs__time {
-  color: #f2f6fa;
+  color: #78706c;
 }
 
 /* Progress and audio bars */
@@ -162,6 +162,9 @@ export default {
     },
     play () {
       this.player.play()
+    },
+    stop () {
+      this.play.stop()
     }
   },
   beforeDestroy () {

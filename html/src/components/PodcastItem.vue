@@ -65,7 +65,7 @@
           </div>
           <div class="action-button share" v-else>
             <div class="action-button-content">
-              <img src="../assets/plus.svg" @click="doAdd" v-if="deleteLoading==false"/>
+              <img src="../assets/plus.svg" @click="doAdd" v-if="deleteLoading==false" title="加入播放列表"/>
               <span v-else><spinner size="14"></spinner></span>
             </div>
           </div>
@@ -107,7 +107,11 @@ export default {
   methods: {
     showPlay () {
       this.isSelected = !this.isSelected
-      this.$refs.vPlay.play()
+      if (this.isSelected) {
+        this.$refs.vPlay.play()
+      } else {
+        this.$refs.vPlay.stop()
+      }
     },
     async doAdd () {
       this.deleteLoading = true
