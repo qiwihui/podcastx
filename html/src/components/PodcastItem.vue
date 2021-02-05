@@ -21,7 +21,7 @@
         <div class="podcast-player">
           <div
             class="podcast-player-button"
-            @click="isSelected=!isSelected"
+            @click="showPlay"
           >
             <img src="../assets/player.svg" />
           </div>
@@ -77,8 +77,8 @@
           ref="vPlay"
           :autoplay="false"
           :forceLive="false"
-          preload="false"
-          :source="selected"
+          :preload="'none'"
+          :source="podcast.audios[0]"
         ></audio-player>
       </div>
     </div>
@@ -101,11 +101,14 @@ export default {
   data () {
     return {
       deleteLoading: false,
-      selected: 'https://podcastx.qiwihui.com/media/601226b5e83cd5e6edf3417e/full.mp3',
       isSelected: false
     }
   },
   methods: {
+    showPlay () {
+      this.isSelected = !this.isSelected
+      this.$refs.vPlay.play()
+    },
     async doAdd () {
       this.deleteLoading = true
       if (!this.isLoggedIn) {

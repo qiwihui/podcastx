@@ -6,50 +6,23 @@
 
 <style>
 @import '../..//node_modules/mediaelement/build/mediaelementplayer.min.css';
-/* .mejs__container {
-  min-width: auto !important;
-}
-.mejs__overlay-button {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.mejs__controls div{
-  display: inline-block;
-}
-.mejs__time-rail {
-  width: 50%;
-}
-.mejs__fullscreen > button {
-  background-position: -80px 0 !important;
-}
-
-mediaelementwrapper,mediaelementwrapper > div {
-  height: 100%;
-  display: block;
-}
-mediaelementwrapper object{
-  width: 100% !important;
-  height: 100% !important;
-} */
 
 /* Player background */
 .mejs__container .mejs__container,
 .mejs__container .mejs__controls,
 .mejs__container .mejs__embed,
 .mejs__container .mejs__embed body {
-  background-color: #efefef;
+  background-color: #f7fafc;
+  /* #f7fafc */
 }
 
 /* Player controls */
-.mejs__container .mejs__button > button {
-  /* background-image: url("images/mejs-controls-dark.svg"); */
-}
+/* .mejs__container .mejs__button > button {
+  background-image: url("images/mejs-controls-dark.svg");
+} */
 
 .mejs__container .mejs__time {
-  color: #888888;
+  color: #f2f6fa;
 }
 
 /* Progress and audio bars */
@@ -57,7 +30,7 @@ mediaelementwrapper object{
 /* Progress and audio bar background */
 .mejs__container .mejs__controls .mejs__horizontal-volume-slider .mejs__horizontal-volume-total,
 .mejs__container .mejs__controls .mejs__time-rail .mejs__time-total {
-  background-color: #fff;
+  background-color: #c4c4c4;
 }
 
 /* Track progress bar background (amount of track fully loaded)
@@ -69,7 +42,7 @@ mediaelementwrapper object{
 /* Current track progress and active audio volume level bar */
 .mejs__container .mejs__controls .mejs__horizontal-volume-slider .mejs__horizontal-volume-current,
 .mejs__container .mejs__controls .mejs__time-rail .mejs__time-current {
-  background: #db4e88;
+  background: #19e68c;
 }
 
 /* Reduce height of the progress and audio bars */
@@ -186,6 +159,9 @@ export default {
     },
     remove () {
       this.player.remove()
+    },
+    play () {
+      this.player.play()
     }
   },
   beforeDestroy () {

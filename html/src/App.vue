@@ -24,7 +24,7 @@ body {
   /* background: linear-gradient(135deg, rgb(65, 184, 131), rgb(74, 156, 238)); */
   /* color: #fff; */
   overflow-y: auto;
-  background-color: rgba(247,250,252,1);
+  background-color: #f7fafc;
 }
 
 /* #app {
