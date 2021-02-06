@@ -4,12 +4,17 @@
       <nav-bar></nav-bar>
     </header>
     <div class="audio-player">
-      <audio-player :articleId="articleId" ref="vPlay" :autoplay="true" :forceLive="true" preload="true" :source="selected"></audio-player>
+      <podcast-item
+        :podcast="article"
+        :show-delete="false"
+        :show-select="true"
+      ></podcast-item>
     </div>
   </div>
 </template>
 
 <script>
+import PodcastItem from '@/components/PodcastItem'
 import NavBar from '@/components/NavBar'
 import PodcastPlayer from '@/components/PodcastPlayer'
 import AudioPlayer from '@/components/AudioPlayer'
@@ -17,20 +22,34 @@ export default {
   name: 'Podcast',
   data () {
     return {
-      selected: 'https://podcastx.qiwihui.com/media/601226b5e83cd5e6edf3417e/full.mp3',
       error_message: '',
       loading: false,
-      articleId: this.$route.params.podcastId
+      article: {}
     }
   },
   mounted () {
+    this.getArticle()
   },
   methods: {
+    async getArticle () {
+      let self = this
+      this.loading = true
+      await this.$http
+        .get('/api/articles/' + this.$route.params.podcastId)
+        .then(response => {
+          self.article = response.data.data.article
+        })
+        .catch(() => {
+        }).finally(() => {
+          self.loading = false
+        })
+    }
   },
   components: {
     NavBar,
     PodcastPlayer,
-    AudioPlayer
+    AudioPlayer,
+    PodcastItem
   }
 }
 </script>

@@ -17,11 +17,13 @@ class Article(Resource):
     def get(self, article_id):
         article = get_object(ArticleDoc, article_id)
         if article:
+            status = 1
             data = article.json()
         else:
+            status = 0
             data = {}
 
-        result = {"status": 1, "msg": "ok", "data": data}
+        result = {"status": status, "msg": "ok", "data": {"article": data}}
         return result, 200
 
     @jwt_required

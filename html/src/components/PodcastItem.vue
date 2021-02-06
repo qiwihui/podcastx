@@ -71,7 +71,7 @@
           </div>
         </div>
       </div>
-      <div class="podcast-mini-player" v-show="isSelected">
+      <div class="podcast-mini-player" v-show="showSelect || isSelected">
         <audio-player
           :height="'40px'"
           ref="vPlay"
@@ -96,6 +96,10 @@ export default {
     showDelete: {
       type: Boolean,
       default: true
+    },
+    showSelect: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -182,15 +186,6 @@ export default {
   computed: {
     podcastDescription: function () {
       return this.podcast.content
-    },
-    podcastInfo: function () {
-      return {
-        title: this.podcast.title,
-        artist: this.podcast.author,
-        src: this.podcast.audios[0],
-        pic: this.podcast.image,
-        list: []
-      }
     },
     isLoggedIn: function () { return this.$store.getters.isAuthenticated }
   },
