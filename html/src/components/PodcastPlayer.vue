@@ -62,7 +62,7 @@ export default {
         .then(res => res.json())
         .then(data => {
           if (data.status === 1) {
-            this.article_info = data.data
+            this.article_info = data.data.article
             if (this.article_info.status === 1) {
               for (let p in this.article_info.audios) {
                 this.podcasts.push({
