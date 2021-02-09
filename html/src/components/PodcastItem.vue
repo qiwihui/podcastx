@@ -8,7 +8,7 @@
     </div>
     <div class="podcast-title">
       <div class="podcast-title-title">
-        {{ podcast.title }}
+        <a :href="podcast.url" target="_blank">{{ podcast.title }}</a>
       </div>
       <div class="podcast-title-subtitle" v-if="podcast.author!=''">{{ podcast.author }}</div>
       <div class="podcast-title-subtitle">&nbsp;</div>
@@ -22,6 +22,7 @@
           <div
             class="podcast-player-button"
             @click="showPlay"
+            title="播放"
           >
             <img src="../assets/player.svg" />
           </div>
@@ -201,7 +202,7 @@ export default {
 .podcast {
   padding: 1.75rem 1.25rem 0;
   line-height: 130%;
-  cursor: pointer;
+  /* cursor: pointer; */
   text-decoration: none;
   display: grid;
   grid-template-columns: 7rem auto;
@@ -348,12 +349,13 @@ export default {
 }
 
 .podcast-player .podcast-player-button {
+  cursor: pointer;
   margin-right: 0.75rem;
 }
 
 a {
   color: #1a1a1a;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .podcast-player-information {
