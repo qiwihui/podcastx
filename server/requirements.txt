@@ -5,7 +5,7 @@ mongoengine_goodjson
 flask-mongoengine
 flask-marshmallow
 flask-bcrypt
-flask-jwt-extended
+flask-jwt-extended==3.25.1
 requests
 python-dateutil
 # Data and workers.
