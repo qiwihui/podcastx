@@ -13,6 +13,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: replace env
+        run: |
+          sed -i 's/SECRET_KEY=/SECRET_KEY=${{ secrets.SECRET_KEY }}/g' .env
+          sed -i 's/JWT_SECRET_KEY=/JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}/g' .env
+          sed -i 's/mongo-password/${{ secrets.MONGO_PASSWORD }}/g' init-mongo.js
+          sed -i 's/"private_key":\ ""/"private_key":\ "${{ secrets.PRIVATE_KEY }}"/g' server/google-tts-key.json
+          sed -i 's/"private_key_id":\ ""/"private_key_id":\ "${{ secrets.PRIVATE_KEY_ID }}"/g' server/google-tts-key.json
       - name: build
         run: sudo docker-compose build
       - name: run services
